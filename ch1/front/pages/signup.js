@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import AppLayout from "../components/AppLayout";
-import Head from "next/head";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
 
@@ -44,76 +42,60 @@ const Signup = () => {
     setCheckBox(e.target.checked);
   };
 
+  const useInput = (e) => {};
+
   return (
     <div>
-      <Head>
-        <title>Signup Page</title>
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.1.3/antd.css" //ant-desing CDN으로 직접 css를 import하려면 웹펙에서 설정을 해줘야함
-        />
-      </Head>
-      <AppLayout>
-        <Form
-          {...layout}
-          onFinish={onSubmit}
-          validateMessages={validateMessages}
+      <Form {...layout} onFinish={onSubmit} validateMessages={validateMessages}>
+        <Form.Item
+          name="id"
+          label="ID"
+          value={id}
+          rules={[{ required: true }]}
+          onChange={onChangeId}
         >
-          <Form.Item
-            name="id"
-            label="ID"
-            value={id}
-            rules={[{ required: true }]}
-            onChange={onChangeId}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="nickname"
-            label="Nick Name"
-            value={nickName}
-            rules={[{ required: true }]}
-            onChange={onChangeNickName}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="password"
-            label="Password"
-            value={password}
-            rules={[{ required: true }]}
-            onChange={onChangePassword}
-          >
-            <Input.Password />
-          </Form.Item>
-          <Form.Item
-            label="Confirm Password"
-            value={passwordConfirm}
-            rules={[{ required: true }]}
-          >
-            <Input.Password
-              onChange={onChangePasswordConfirm}
-              name="passwordConfirm"
-            />
-            {passwordErr && (
-              <div style={{ color: "red" }}>Password is invalid</div>
-            )}
-          </Form.Item>
-          <Checkbox
-            onChange={onChangeCheckBox}
-            style={{ marginBottom: "20px" }}
-          >
-            Confirm it?
-          </Checkbox>
-          {checkBoxErr && (
-            <div style={{ color: "red" }}>Should be Checked!</div>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="nickname"
+          label="Nick Name"
+          value={nickName}
+          rules={[{ required: true }]}
+          onChange={onChangeNickName}
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="password"
+          label="Password"
+          value={password}
+          rules={[{ required: true }]}
+          onChange={onChangePassword}
+        >
+          <Input.Password />
+        </Form.Item>
+        <Form.Item
+          label="Confirm Password"
+          value={passwordConfirm}
+          rules={[{ required: true }]}
+        >
+          <Input.Password
+            onChange={onChangePasswordConfirm}
+            name="passwordConfirm"
+          />
+          {passwordErr && (
+            <div style={{ color: "red" }}>Password is invalid</div>
           )}
-          <br />
-          <Button type="primary" htmlType="submit" value={checkBox}>
-            SUBMIT
-          </Button>
-        </Form>
-      </AppLayout>
+        </Form.Item>
+        <Checkbox onChange={onChangeCheckBox} style={{ marginBottom: "20px" }}>
+          Confirm it?
+        </Checkbox>
+        {checkBoxErr && <div style={{ color: "red" }}>Should be Checked!</div>}
+        <br />
+        <Button type="primary" htmlType="submit" value={checkBox}>
+          SUBMIT
+        </Button>
+      </Form>
     </div>
   );
 };
