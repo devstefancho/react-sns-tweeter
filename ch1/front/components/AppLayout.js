@@ -8,16 +8,17 @@ import {
   Divider,
   Card,
   Avatar,
-  AutoComplete,
+  Form,
 } from "antd";
-import {
-  EditOutlined,
-  EllipsisOutlined,
-  SettingOutlined,
-} from "@ant-design/icons";
 import Link from "next/link";
+import Login from "../components/login";
+import Profilecard from "../components/profilecard";
 
-const { Meta } = Card;
+const dummyData = {
+  isLogged: false,
+  title: "SUNGJIN",
+  description: "this is nodebrid",
+};
 
 const AppLayout = ({ children }) => {
   return (
@@ -50,22 +51,11 @@ const AppLayout = ({ children }) => {
       </Divider>
       <Row gutter={16}>
         <Col span={6}>
-          <Card
-            // style={{}}
-            actions={[
-              <SettingOutlined key="setting" />,
-              <EditOutlined key="edit" />,
-              <EllipsisOutlined key="ellipsis" />,
-            ]}
-          >
-            <Meta
-              avatar={
-                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
-              }
-              title="Card"
-              description="Tdescription"
-            />
-          </Card>
+          {dummyData.isLogged ? (
+            <Profilecard dummy={dummyData}></Profilecard>
+          ) : (
+            <Login></Login>
+          )}
         </Col>
         <Col span={12}>{children}</Col>
         <Col span={6}>right side menu</Col>

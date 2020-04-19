@@ -2,6 +2,15 @@ import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
 
+//Custom hook for input form and export for reusable
+export const useInput = (initValue = null) => {
+  const [value, setter] = useState(initValue);
+  const handler = useCallback((e) => {
+    setter(e.target.value);
+  }, []);
+  return [value, handler];
+};
+
 const Signup = () => {
   const validateMessages = {
     required: "${name} is required!",
@@ -12,31 +21,25 @@ const Signup = () => {
     // wrapperCol: { span: 6 },
   };
 
-  const [id, setId] = useState("");
-  const [nickName, setNickName] = useState("");
-  const [password, setPassword] = useState("");
-  const [passwordConfirm, setPasswordConfirm] = useState("");
+  const [id, onChangeId] = useInput("");
+  const [nickName, onChangeNickName] = useInput("");
+  const [password, onChangePassword] = useInput("");
+  const [passwordConfirm, onChangePasswordConfirm] = useInput("");
   const [checkBox, setCheckBox] = useState(false);
-  const [passwordErr, setPasswordErr] = useState("");
-  const [checkBoxErr, setCheckBoxErr] = useState("");
+  const [passwordErr, setPasswordErr] = useState(false);
+  const [checkBoxErr, setCheckBoxErr] = useState(true);
 
   const onSubmit = () => {
+    if (password !== passwordConfirm) {
+      console.log("password is invalid");
+      return setPasswordErr(true);
+    } else {
+      console.log("password correct");
+      return setPasswordErr(false);
+    }
     console.log(id, password, checkBox);
   };
 
-  const onChangeId = useCallback((e) => {
-    setId(e.target.value);
-  });
-  const onChangeNickName = useCallback((e) => {
-    setNickName(e.target.value);
-  });
-  const onChangePassword = useCallback((e) => {
-    setPassword(e.target.value);
-  });
-  const onChangePasswordConfirm = useCallback((e) => {
-    setPasswordErr(e.target.value !== password);
-    setPasswordConfirm(e.target.value);
-  });
   const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);
     setCheckBox(e.target.checked);
