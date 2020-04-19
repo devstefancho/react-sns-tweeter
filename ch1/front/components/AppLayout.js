@@ -1,10 +1,27 @@
 import React from "react";
-import { Menu, Input, Button } from "antd";
+import {
+  Menu,
+  Input,
+  Button,
+  Row,
+  Col,
+  Divider,
+  Card,
+  Avatar,
+  AutoComplete,
+} from "antd";
+import {
+  EditOutlined,
+  EllipsisOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
 import Link from "next/link";
+
+const { Meta } = Card;
 
 const AppLayout = ({ children }) => {
   return (
-    <div>
+    <React.Fragment>
       <Menu mode="horizontal">
         <Menu.Item key="nodebird">
           <Link href="/">
@@ -25,9 +42,35 @@ const AppLayout = ({ children }) => {
           <Input.Search enterButton style={{ verticalAlign: "middle" }} />
         </Menu.Item>
       </Menu>
-      <Button>회원가입</Button>
-      {children}
-    </div> // Applayout을 import한 Index.js에서 AppLayout의 내부에 있는 컴포넌트들이 children자리로 들어가는 것
+      <Divider
+        orientation="left"
+        style={{ color: "#333", fontWeight: "normal" }}
+      >
+        Info Section
+      </Divider>
+      <Row gutter={16}>
+        <Col span={6}>
+          <Card
+            // style={{}}
+            actions={[
+              <SettingOutlined key="setting" />,
+              <EditOutlined key="edit" />,
+              <EllipsisOutlined key="ellipsis" />,
+            ]}
+          >
+            <Meta
+              avatar={
+                <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
+              }
+              title="Card"
+              description="Tdescription"
+            />
+          </Card>
+        </Col>
+        <Col span={12}>{children}</Col>
+        <Col span={6}>right side menu</Col>
+      </Row>
+    </React.Fragment> // Applayout을 import한 Index.js에서 AppLayout의 내부에 있는 컴포넌트들이 children자리로 들어가는 것
   );
 };
 

@@ -3,12 +3,12 @@ import Link from "next/link";
 
 const Home = () => {
   return (
-    <div>
+    <React.Fragment>
       <Link href="/about">
         <a>about</a>
       </Link>
       <h1>Hello Home</h1>
-    </div>
+    </React.Fragment>
   );
 };
 

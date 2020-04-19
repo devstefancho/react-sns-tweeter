@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
 
@@ -8,8 +8,8 @@ const Signup = () => {
   };
   const layout = {
     style: { padding: "20px" },
-    labelCol: { span: 6 },
-    wrapperCol: { span: 8 },
+    labelCol: { span: 12 },
+    // wrapperCol: { span: 6 },
   };
 
   const [id, setId] = useState("");
@@ -24,28 +24,26 @@ const Signup = () => {
     console.log(id, password, checkBox);
   };
 
-  const onChangeId = (e) => {
+  const onChangeId = useCallback((e) => {
     setId(e.target.value);
-  };
-  const onChangeNickName = (e) => {
+  });
+  const onChangeNickName = useCallback((e) => {
     setNickName(e.target.value);
-  };
-  const onChangePassword = (e) => {
+  });
+  const onChangePassword = useCallback((e) => {
     setPassword(e.target.value);
-  };
-  const onChangePasswordConfirm = (e) => {
+  });
+  const onChangePasswordConfirm = useCallback((e) => {
     setPasswordErr(e.target.value !== password);
     setPasswordConfirm(e.target.value);
-  };
-  const onChangeCheckBox = (e) => {
+  });
+  const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);
     setCheckBox(e.target.checked);
-  };
-
-  const useInput = (e) => {};
+  });
 
   return (
-    <div>
+    <React.Fragment>
       <Form {...layout} onFinish={onSubmit} validateMessages={validateMessages}>
         <Form.Item
           name="id"
@@ -96,7 +94,7 @@ const Signup = () => {
           SUBMIT
         </Button>
       </Form>
-    </div>
+    </React.Fragment>
   );
 };
 

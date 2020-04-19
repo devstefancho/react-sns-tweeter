@@ -2,9 +2,9 @@ import React from "react";
 
 const Profile = () => {
   return (
-    <div>
+    <React.Fragment>
       <div>Profile</div>
-    </div>
+    </React.Fragment>
   );
 };
 

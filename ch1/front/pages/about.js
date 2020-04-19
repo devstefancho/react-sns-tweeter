@@ -1,7 +1,11 @@
 import React from "react";
 
 const About = () => {
-  return <div>About</div>;
+  return (
+    <React.Fragment>
+      <div>About</div>
+    </React.Fragment>
+  );
 };
 
 export default About;

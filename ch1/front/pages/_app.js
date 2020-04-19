@@ -1,10 +1,11 @@
 import React from "react";
 import Head from "next/head";
 import AppLayout from "../components/AppLayout";
+import Proptypes from "prop-types";
 
 const NodeBird = ({ Component }) => {
   return (
-    <div>
+    <React.Fragment>
       <Head>
         <title>Node bird with react</title>
         <link
@@ -15,8 +16,12 @@ const NodeBird = ({ Component }) => {
       <AppLayout>
         <Component />
       </AppLayout>
-    </div>
+    </React.Fragment>
   );
+};
+
+NodeBird.propTypes = {
+  Component: Proptypes.elementType,
 };
 
 export default NodeBird;
