@@ -6,7 +6,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 
-const Profilecard = (dummy) => {
+const Profilecard = ({ dummy }) => {
   return (
     <React.Fragment>
       <Card

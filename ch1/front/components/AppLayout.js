@@ -15,7 +15,7 @@ import Login from "../components/login";
 import Profilecard from "../components/profilecard";
 
 const dummyData = {
-  isLogged: false,
+  isLogged: true,
   title: "SUNGJIN",
   description: "this is nodebrid",
 };
