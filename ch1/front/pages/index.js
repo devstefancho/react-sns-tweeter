@@ -7,6 +7,7 @@ import {
   MessageOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
+import Postform from "../components/postform";
 
 const dummy = {
   isLogged: true,
@@ -26,35 +27,25 @@ const dummy = {
 const Home = () => {
   return (
     <React.Fragment>
-      <Form encType="multipart/form-data">
-        <Form.Item>
-          <Input placeholder="title" />
-        </Form.Item>
-        <Form.Item>
-          <Input.TextArea
-            maxLength={140}
-            placeholder="What is your latest news?"
-          ></Input.TextArea>
-        </Form.Item>
-        <Input type="file" multiple hidden></Input>
-        <div>
-          {dummy.imagePaths.map((x) => {
-            return (
-              <div key={x} style={{ display: inline - block }}>
-                <img
-                  src={"localhost:/3050/" + x}
-                  alt={x}
-                  style={{ width: "200px" }}
-                ></img>
-              </div>
-            );
-          })}
-        </div>
-        <Button>Upload Image</Button>
-        <Button htmlType="submit" type="primary" style={{ float: "right" }}>
-          Submit
-        </Button>
-      </Form>
+      <Postform></Postform>
+      <Input type="file" multiple hidden></Input>
+      <div>
+        {dummy.imagePaths.map((x) => {
+          return (
+            <div key={x} style={{ display: inline - block }}>
+              <img
+                src={"localhost:/3050/" + x}
+                alt={x}
+                style={{ width: "200px" }}
+              ></img>
+            </div>
+          );
+        })}
+      </div>
+      <Button>Upload Image</Button>
+      <Button htmlType="submit" type="primary" style={{ float: "right" }}>
+        Submit
+      </Button>
       {dummy.mainPosts.map((v, i) => {
         return (
           <Card
