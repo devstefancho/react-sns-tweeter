@@ -1,12 +1,23 @@
-import React from "react";
-import { Form, Input, Button, List, Card } from "antd";
+import React, { useEffect } from "react";
+import { Alert, Form, Input, Button, List, Card } from "antd";
 import { StopOutlined } from "@ant-design/icons";
 import Nickchangeform from "../components/nickchangeform";
+import { useDispatch, useSelector } from "react-redux";
+import { LOG_IN, LOG_OUT, loginAction, logoutAction } from "../reducers/user";
 
 const Profile = () => {
+  const dispatch = useDispatch();
+  const { isLogged, userInfo } = useSelector((state) => state.user);
+  useEffect(() => {
+    dispatch(loginAction);
+    dispatch(logoutAction);
+  }, []);
+
   return (
     <React.Fragment>
+      {isLogged && <Alert message="user Login success !!" type="success" />}
       <Nickchangeform></Nickchangeform>
+
       <List
         itemLayout="horizontal"
         style={{ marginBottom: "20px" }}

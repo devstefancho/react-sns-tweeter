@@ -14,9 +14,9 @@ const dummy = {
   imagePaths: [],
   mainPosts: [
     {
-      User: {
+      userPost: {
         id: 1,
-        nickname: "CHo",
+        nickName: "CHo",
       },
       content: "first blog",
       img: "https://img.icons8.com/plasticine/2x/image.png",
@@ -49,6 +49,7 @@ const Home = () => {
       {dummy.mainPosts.map((v, i) => {
         return (
           <Card
+            key={v}
             hoverable
             style={{ width: 240, padding: 10, marginTop: 10 }}
             cover={v.img && <img alt={v} src={v.img} />}
@@ -61,7 +62,7 @@ const Home = () => {
             extra={<Button>Delete</Button>}
           >
             <Card.Meta
-              title={v.User.nickname}
+              title={v.userPost.nickName}
               description={v.content}
             ></Card.Meta>
           </Card>
