@@ -8,29 +8,16 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 import Postform from "../components/postform";
-
-const dummy = {
-  isLogged: true,
-  imagePaths: [],
-  mainPosts: [
-    {
-      userPost: {
-        id: 1,
-        nickName: "CHo",
-      },
-      content: "first blog",
-      img: "https://img.icons8.com/plasticine/2x/image.png",
-    },
-  ],
-};
+import { useSelector } from "react-redux";
 
 const Home = () => {
+  const { mainPosts, imagePaths } = useSelector((state) => state.post);
   return (
     <React.Fragment>
       <Postform></Postform>
       <Input type="file" multiple hidden></Input>
       <div>
-        {dummy.imagePaths.map((x) => {
+        {imagePaths.map((x) => {
           return (
             <div key={x} style={{ display: inline - block }}>
               <img
@@ -46,7 +33,7 @@ const Home = () => {
       <Button htmlType="submit" type="primary" style={{ float: "right" }}>
         Submit
       </Button>
-      {dummy.mainPosts.map((v, i) => {
+      {mainPosts.map((v, i) => {
         return (
           <Card
             key={v}

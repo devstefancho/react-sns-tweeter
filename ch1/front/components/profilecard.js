@@ -1,12 +1,16 @@
 import React from "react";
-import { Card, Avatar } from "antd";
+import { Card, Avatar, Button } from "antd";
 import {
   EditOutlined,
   EllipsisOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutAction } from "../reducers/user";
 
-const Profilecard = ({ dummy }) => {
+const Profilecard = ({}) => {
+  const dispatch = useDispatch();
+  const {} = useSelector((state) => state.user);
   return (
     <React.Fragment>
       <Card
@@ -21,10 +25,19 @@ const Profilecard = ({ dummy }) => {
           avatar={
             <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
           }
-          title={dummy.title}
-          description={dummy.description}
+          title={"id"}
+          description={"description"}
         />
       </Card>
+      <Button
+        style={{ margin: "10px", float: "right" }}
+        type="primary"
+        onClick={() => {
+          dispatch(logoutAction);
+        }}
+      >
+        LOGOUT
+      </Button>
     </React.Fragment>
   );
 };

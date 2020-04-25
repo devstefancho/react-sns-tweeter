@@ -11,16 +11,12 @@ import {
   Form,
 } from "antd";
 import Link from "next/link";
-import Login from "../components/login";
+import LoginForm from "../components/loginForm";
 import Profilecard from "../components/profilecard";
-
-const dummyData = {
-  isLogged: true,
-  title: "SUNGJIN",
-  description: "this is nodebrid",
-};
+import { useSelector } from "react-redux";
 
 const AppLayout = ({ children }) => {
+  const { isLogged } = useSelector((state) => state.user);
   return (
     <React.Fragment>
       <Menu mode="horizontal">
@@ -51,11 +47,7 @@ const AppLayout = ({ children }) => {
       </Divider>
       <Row gutter={16}>
         <Col span={6}>
-          {dummyData.isLogged ? (
-            <Profilecard dummy={dummyData}></Profilecard>
-          ) : (
-            <Login></Login>
-          )}
+          {isLogged ? <Profilecard></Profilecard> : <LoginForm></LoginForm>}
         </Col>
         <Col span={12}>{children}</Col>
         <Col span={6}>right side menu</Col>

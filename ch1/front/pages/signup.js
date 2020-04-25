@@ -1,6 +1,9 @@
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
+import { useDispatch } from "react-redux";
+import { loginAction, logoutAction, LOG_IN, LOG_OUT } from "../reducers/user";
+import { SignUpAction } from "../reducers/user";
 
 //Custom hook for input form and export for reusable
 export const useInput = (initValue = null) => {
@@ -12,6 +15,7 @@ export const useInput = (initValue = null) => {
 };
 
 const Signup = () => {
+  const dispatch = useDispatch();
   const validateMessages = {
     required: "${name} is required!",
   };
@@ -29,16 +33,17 @@ const Signup = () => {
   const [passwordErr, setPasswordErr] = useState(false);
   const [checkBoxErr, setCheckBoxErr] = useState(true);
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     if (password !== passwordConfirm) {
-      console.log("password is invalid");
+      console.log("password is invalid or checkbox is unchecked");
+      console.log(`password: ${password}, confirm: ${passwordConfirm}`);
       return setPasswordErr(true);
     } else {
-      console.log("password correct");
+      dispatch(SignUpAction({ id, nickName, password }));
+      console.log("password correct and box checked");
       return setPasswordErr(false);
     }
-    console.log(id, password, checkBox);
-  };
+  }, [id, password, passwordConfirm]);
 
   const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);
@@ -76,18 +81,15 @@ const Signup = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item
-          label="Confirm Password"
+          label="passwordConfirm"
+          name="passwordConfirm"
           value={passwordConfirm}
           rules={[{ required: true }]}
+          onChange={onChangePasswordConfirm}
         >
-          <Input.Password
-            onChange={onChangePasswordConfirm}
-            name="passwordConfirm"
-          />
-          {passwordErr && (
-            <div style={{ color: "red" }}>Password is invalid</div>
-          )}
+          <Input.Password />
         </Form.Item>
+        {passwordErr && <div style={{ color: "red" }}>Password is invalid</div>}
         <Checkbox onChange={onChangeCheckBox} style={{ marginBottom: "20px" }}>
           Confirm it?
         </Checkbox>

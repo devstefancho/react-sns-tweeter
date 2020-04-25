@@ -8,10 +8,10 @@ import { LOG_IN, LOG_OUT, loginAction, logoutAction } from "../reducers/user";
 const Profile = () => {
   const dispatch = useDispatch();
   const { isLogged, userInfo } = useSelector((state) => state.user);
-  useEffect(() => {
-    dispatch(loginAction);
-    dispatch(logoutAction);
-  }, []);
+  // useEffect(() => {
+  //   dispatch(loginAction);
+  //   dispatch(logoutAction);
+  // }, []);
 
   return (
     <React.Fragment>

@@ -1,18 +1,27 @@
 import React from "react";
 import { Form, Button, Input } from "antd";
 import { useInput } from "../pages/signup";
+import { useSelector, useDispatch } from "react-redux";
+import { loginAction, logoutAction, LOG_OUT, LOG_IN } from "../reducers/user";
 
-const Login = () => {
+const LoginForm = () => {
   const [loginId, onChangeLoginId] = useInput("");
   const [loginPassword, onChangeLoginPassword] = useInput("");
+  const dispatch = useDispatch();
 
   const onSubmitLogin = () => {
     console.log(loginId, loginPassword);
+    dispatch(loginAction);
   };
-
+  // const { isLogged } = useSelector((state) => state.user);
   return (
     <React.Fragment>
-      <Form name="user-login" onFinish={onSubmitLogin} layout={"vertical"}>
+      <Form
+        name="user-login"
+        onFinish={onSubmitLogin}
+        layout={"vertical"}
+        style={{ margin: "10px" }}
+      >
         <Form.Item
           label="user-id"
           name="user-id"
@@ -30,7 +39,7 @@ const Login = () => {
           <Input.Password />
         </Form.Item>
         <Form.Item>
-          <Button htmlType="submit" type="primary">
+          <Button htmlType="submit" type="primary" style={{ float: "right" }}>
             LogIn
           </Button>
         </Form.Item>
@@ -39,4 +48,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginForm;

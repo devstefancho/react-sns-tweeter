@@ -1,8 +1,9 @@
 export const initialState = {
-  isLogged: true,
+  isLogged: false,
   userInfo: {
-    id: 99,
-    nickname: "sungjin CHO",
+    id: "",
+    nickName: "",
+    password: "",
   },
 };
 
@@ -14,7 +15,7 @@ export const loginAction = {
     isLogged: true,
     userInfo: {
       id: 1,
-      nickname: "Login CHO",
+      nickName: "Login CHO",
     },
   },
 };
@@ -25,11 +26,16 @@ export const logoutAction = {
   type: LOG_OUT,
   data: {
     isLogged: false,
-    userInfo: {
-      id: 2,
-      nickname: "Logout CHO",
-    },
+    userInfo: {},
   },
+};
+
+export const SIGN_UP = "SIGN_UP";
+export const SignUpAction = (data) => {
+  return {
+    type: SIGN_UP,
+    data: data,
+  };
 };
 
 const reducer = (state = initialState, action) => {
@@ -39,6 +45,9 @@ const reducer = (state = initialState, action) => {
 
     case LOG_OUT:
       return { ...state, isLogged: false, userInfo: action.data };
+
+    case SIGN_UP:
+      return { ...state, userInfo: action.data };
 
     default:
       return state;

@@ -1,35 +1,38 @@
 export const initialState = {
-  mainPost: {
-    id: 77,
-    nickName: "User Post",
-    content: "this is user content",
-  },
+  mainPosts: [
+    {
+      userPost: {
+        nickName: undefined,
+      },
+      content: undefined,
+      img: undefined,
+    },
+  ],
+  imagePaths: [],
 };
 
-export const ADD_DUMMY = "ADD_DUMMY";
 export const ADD_POST = "ADD_POST";
 
-export const addDummyAction = {
-  type: ADD_DUMMY,
+const dummy = {
   data: {
-    id: "777",
-    nickName: "dummy data !!",
-    content: "empty content !!",
+    userPost: {
+      nickName: "CHo",
+    },
+    content: "first blog",
+    img: "https://img.icons8.com/plasticine/2x/image.png",
   },
 };
 
 export const addPostAction = {
   type: ADD_POST,
-  data: {},
+  data: [dummy.data],
 };
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
-    case ADD_DUMMY:
-      return { ...state, mainPost: action.data };
-
     case ADD_POST:
       return { ...state, mainPost: action.data };
+
     default:
       return { ...state };
   }
