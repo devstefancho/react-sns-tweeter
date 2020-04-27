@@ -6,7 +6,7 @@ import {
   SettingOutlined,
 } from "@ant-design/icons";
 import { useDispatch, useSelector } from "react-redux";
-import { logoutAction } from "../reducers/user";
+import { LOG_OUT } from "../reducers/user";
 
 const Profilecard = ({}) => {
   const dispatch = useDispatch();
@@ -33,7 +33,7 @@ const Profilecard = ({}) => {
         style={{ margin: "10px", float: "right" }}
         type="primary"
         onClick={() => {
-          dispatch(logoutAction);
+          dispatch(LOG_OUT);
         }}
       >
         LOGOUT

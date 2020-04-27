@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
-import { useDispatch } from "react-redux";
-import { loginAction, logoutAction, LOG_IN, LOG_OUT } from "../reducers/user";
-import { SignUpAction } from "../reducers/user";
+import { useDispatch, useSelector } from "react-redux";
+import { SIGN_UP_REQUEST } from "../reducers/user";
 
 //Custom hook for input form and export for reusable
 export const useInput = (initValue = null) => {
@@ -15,6 +14,7 @@ export const useInput = (initValue = null) => {
 };
 
 const Signup = () => {
+  const { isSigningUp } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const validateMessages = {
     required: "${name} is required!",
@@ -39,7 +39,7 @@ const Signup = () => {
       console.log(`password: ${password}, confirm: ${passwordConfirm}`);
       return setPasswordErr(true);
     } else {
-      dispatch(SignUpAction({ id, nickName, password }));
+      dispatch({ type: SIGN_UP_REQUEST, data: { id, nickName, password } });
       console.log("password correct and box checked");
       return setPasswordErr(false);
     }
@@ -95,7 +95,12 @@ const Signup = () => {
         </Checkbox>
         {checkBoxErr && <div style={{ color: "red" }}>Should be Checked!</div>}
         <br />
-        <Button type="primary" htmlType="submit" value={checkBox}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          value={checkBox}
+          loading={isSigningUp}
+        >
           SUBMIT
         </Button>
       </Form>
