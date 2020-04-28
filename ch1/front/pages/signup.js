@@ -1,8 +1,13 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
 import { useDispatch, useSelector } from "react-redux";
-import { SIGN_UP_REQUEST } from "../reducers/user";
+import {
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
+} from "../reducers/user";
+import { Router } from "next/router";
 
 //Custom hook for input form and export for reusable
 export const useInput = (initValue = null) => {
@@ -14,8 +19,6 @@ export const useInput = (initValue = null) => {
 };
 
 const Signup = () => {
-  const { isSigningUp } = useSelector((state) => state.user);
-  const dispatch = useDispatch();
   const validateMessages = {
     required: "${name} is required!",
   };
@@ -24,7 +27,7 @@ const Signup = () => {
     labelCol: { span: 12 },
     // wrapperCol: { span: 6 },
   };
-
+  const { isSigningUp, me } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput("");
   const [nickName, onChangeNickName] = useInput("");
   const [password, onChangePassword] = useInput("");
@@ -32,6 +35,15 @@ const Signup = () => {
   const [checkBox, setCheckBox] = useState(false);
   const [passwordErr, setPasswordErr] = useState(false);
   const [checkBoxErr, setCheckBoxErr] = useState(true);
+
+  useEffect(() => {
+    if (me) {
+      alert("You have been signed up!!");
+      Router.push("/");
+    }
+  }, [me && me.id]);
+
+  const dispatch = useDispatch();
 
   const onSubmit = useCallback(() => {
     if (password !== passwordConfirm) {

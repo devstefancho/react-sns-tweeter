@@ -9,25 +9,25 @@ export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
 
 // dummy User
 const dummy = {
-  userInfo: {
-    id: 1,
-    nickName: "stefan",
-    password: "12345",
-  },
+  id: 1,
+  nickName: "stefan",
+  password: "12345",
 };
-
-const none = {};
 
 export const initialState = {
   isLogged: false,
   isLogging: false,
   isSigned: false,
   isSigningUp: false,
+  me: null,
   userInfo: {
+    // 남의 정보
     id: "",
     nickName: "",
     password: "",
   },
+  followingList: [],
+  followerList: [],
   error: "",
 };
 
@@ -40,23 +40,29 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     //LOG_IN, LOG_OUT
     case LOG_IN_REQUEST:
-      return { ...state, isLogged: false, isLogging: true, userInfo: none };
+      return { ...state, isLogged: false, isLogging: true, me: null };
     case LOG_IN_SUCCESS:
       return {
         ...state,
         isLogged: true,
         isLogging: false,
-        userInfo: dummy,
+        me: dummy,
       };
     case LOG_IN_FAILURE:
-      return { ...state, isLogged: false, isLogging: false, userInfo: none };
+      return {
+        ...state,
+        isLogged: false,
+        isLogging: false,
+        me: null,
+        error: e,
+      };
 
     case LOG_OUT_REQUEST:
       return {
         ...state,
         isLogged: false,
         isLogging: false,
-        userInfo: action.data,
+        me: null,
       };
     // SIGN_UP
     case SIGN_UP_REQUEST:
@@ -64,7 +70,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSigned: false,
         isSigningUp: true,
-        userInfo: action.data,
+        me: action.data, // signup.js에서 dispatch에 data를 넣어줌. (onSubmit의 else에 위치)
       };
     case SIGN_UP_SUCCESS:
       return {
@@ -77,11 +83,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSigned: false,
         isSigningUp: false,
-        data: action.error,
+        error: e,
       };
 
     default:
-      return state;
+      return { ...state };
   }
 };
 

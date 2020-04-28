@@ -23,7 +23,7 @@ function* login() {
     yield delay(2000);
     yield put({ type: LOG_IN_SUCCESS });
   } catch (e) {
-    yield put({ type: LOG_IN_FAILURE });
+    yield put({ type: LOG_IN_FAILURE, error: e });
   }
 }
 

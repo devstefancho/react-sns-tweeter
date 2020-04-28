@@ -1,22 +1,67 @@
-import React from "react";
-import { Form, Input } from "antd";
+import React, { useState, useCallback, useEffect } from "react";
+import { Form, Input, Button } from "antd";
+import { useSelector, useDispatch } from "react-redux";
+import { ADD_POST_REQUEST } from "../reducers/post";
 
-const Postform = () => {
+const PostForm = () => {
+  const { imagePaths, isAddingPost, isAddedPost } = useSelector(
+    (state) => state.post
+  );
+  const [text, setText] = useState("");
+  const dispatch = useDispatch();
+
+  const onChangeText = useCallback((e) => {
+    setText(e.target.value);
+  }, []);
+
+  const onSubmit = useCallback(() => {
+    dispatch({ type: ADD_POST_REQUEST, data: { text } });
+  }, []);
+
+  useEffect(() => {
+    if (isAddedPost) {
+      setText("");
+    }
+  }, [isAddedPost]);
+
   return (
     <React.Fragment>
-      <Form encType="multipart/form-data">
-        <Form.Item>
-          <Input placeholder="title" />
-        </Form.Item>
+      <Form encType="multipart/form-data" onFinish={onSubmit}>
         <Form.Item>
           <Input.TextArea
             maxLength={140}
             placeholder="What is your latest news?"
+            value={text}
+            onChange={onChangeText}
           ></Input.TextArea>
         </Form.Item>
+
+        <Input type="file" multiple hidden></Input>
+        <div>
+          {imagePaths.map((x) => {
+            return (
+              <div key={x} style={{ display: inline - block }}>
+                <img
+                  src={"localhost:/3050/" + x}
+                  alt={x}
+                  style={{ width: "200px" }}
+                ></img>
+              </div>
+            );
+          })}
+        </div>
+        <Button>Upload Image</Button>
+        <Button
+          htmlType="submit"
+          type="primary"
+          style={{ float: "right" }}
+          loading={isAddingPost}
+        >
+          Submit
+        </Button>
       </Form>
     </React.Fragment>
   );
 };
 
-export default Postform;
+export default PostForm;

@@ -8,7 +8,6 @@ import { createStore, compose, applyMiddleware } from "redux";
 import reducer from "../reducers";
 import rootSaga from "../sagas";
 import createSagaMiddleware from "redux-saga";
-import { initialState } from "../reducers/user";
 
 const NodeBird = ({ Component, store }) => {
   return (
