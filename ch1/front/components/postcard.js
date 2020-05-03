@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { ADD_COMMENT_REQUEST } from "../reducers/post";
 import { Card, Button, Avatar, Input, Comment, List, Form } from "antd";
 import {
   RetweetOutlined,
@@ -7,23 +9,39 @@ import {
   EllipsisOutlined,
 } from "@ant-design/icons";
 
-const CommentList = ({ comments }) => (
-  <List
-    dataSource={comments}
-    header={`${comments.length} ${comments.length > 1 ? "replies" : "reply"}`}
-    itemLayout="horizontal"
-    renderItem={(props) => <Comment {...props} />}
-  />
-);
-
 const PostCard = ({ post }) => {
-  const [commentState, setCommentState] = useState(false);
-  const onCommentToggle = () => {
-    setCommentState((prev) => !prev);
-  };
+  const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const { me } = useSelector((state) => state.user);
+  const { isAddedComment, isAddingComment } = useSelector(
+    (state) => state.post
+  );
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log("effect");
+    setCommentText("");
+  }, [isAddedComment === true]);
+
+  const onCommentToggle = useCallback(() => {
+    setCommentFormOpened((prev) => !prev);
+  }, []);
+
+  const onChangeCommentText = useCallback((e) => {
+    setCommentText(e.target.value);
+  }, []);
+
+  const onSubmitComment = useCallback(() => {
+    if (!me) {
+      return alert("Please Login First");
+    }
+    console.log("submit");
+    console.log(post.id);
+    return dispatch({ type: ADD_COMMENT_REQUEST, data: { postId: post.id } });
+  }, [me && me.id]);
 
   return (
-    <React.Fragment>
+    <div>
       <Card
         key={+post.createdAt}
         hoverable
@@ -35,40 +53,45 @@ const PostCard = ({ post }) => {
           <MessageOutlined onClick={onCommentToggle} />,
           <EllipsisOutlined />,
         ]}
-        extra={<Button>Delete</Button>}
+        extra={<Button>Follow</Button>}
       >
         <Card.Meta
-          title={post.userPost.nickName}
+          title={post.User.nickName}
           description={post.content}
         ></Card.Meta>
       </Card>
-      {false && comments.length > 0 && <CommentList comments={comments} />}
-      {commentState && (
-        <Comment
-          avatar={
-            <Avatar
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              alt="Han Solo"
-            />
-          }
-          content={<Editor />}
-        />
+      {commentFormOpened && (
+        <React.Fragment>
+          <Form onFinish={onSubmitComment}>
+            <Form.Item>
+              <Input.TextArea
+                rows={4}
+                value={commentText}
+                onChange={onChangeCommentText}
+              />
+            </Form.Item>
+            <Button type="primary" htmlType="submit" loading={isAddingComment}>
+              Reply
+            </Button>
+          </Form>
+          <List
+            header={`${post.Comments ? post.Comments.length : 0} 댓글`}
+            itemLayout="horizontal"
+            dataSource={post.Comments || []}
+            renderItem={(item) => (
+              <li>
+                <Comment
+                  author={item.User.nickName}
+                  avatar={<Avatar>{item.User.nickName[0]}</Avatar>}
+                  content={item.content}
+                />
+              </li>
+            )}
+          />
+        </React.Fragment>
       )}
-    </React.Fragment>
+    </div>
   );
 };
-
-const Editor = () => (
-  <div>
-    <Form.Item>
-      <Input.TextArea rows={4} />
-    </Form.Item>
-    <Form.Item>
-      <Button htmlType="submit" loading={false} type="primary">
-        Add Comment
-      </Button>
-    </Form.Item>
-  </div>
-);
 
 export default PostCard;
