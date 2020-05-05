@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Form, Button, Input } from "antd";
 import { useInput } from "../pages/signup";
 import { useSelector, useDispatch } from "react-redux";
@@ -15,10 +15,16 @@ const LoginForm = () => {
   const dispatch = useDispatch();
   const { isLogging } = useSelector((state) => state.user);
 
-  const onSubmitLogin = () => {
+  const onSubmitLogin = useCallback(() => {
     console.log(loginId, loginPassword);
-    dispatch({ type: LOG_IN_REQUEST });
-  };
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: {
+        userId: loginId,
+        password: loginPassword,
+      },
+    });
+  }, [loginId, loginPassword]);
   // const { isLogged } = useSelector((state) => state.user);
   return (
     <React.Fragment>
@@ -34,7 +40,7 @@ const LoginForm = () => {
           rules={[{ required: true, message: "Please input your ID" }]}
           onChange={onChangeLoginId}
         >
-          <Input />
+          <Input value={loginId} />
         </Form.Item>
         <Form.Item
           label="user-password"
@@ -42,7 +48,7 @@ const LoginForm = () => {
           rules={[{ required: true, message: "Please input your Password" }]}
           onChange={onChangeLoginPassword}
         >
-          <Input.Password />
+          <Input.Password value={loginPassword} />
         </Form.Item>
         <Form.Item>
           <Button

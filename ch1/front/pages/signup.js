@@ -7,7 +7,7 @@ import {
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from "../reducers/user";
-import { Router } from "next/router";
+import Router from "next/router";
 
 //Custom hook for input form and export for reusable
 export const useInput = (initValue = null) => {
@@ -51,11 +51,18 @@ const Signup = () => {
       console.log(`password: ${password}, confirm: ${passwordConfirm}`);
       return setPasswordErr(true);
     } else {
-      dispatch({ type: SIGN_UP_REQUEST, data: { id, nickName, password } });
+      dispatch({
+        type: SIGN_UP_REQUEST,
+        data: {
+          userId: id,
+          nickname: nickName,
+          password: password,
+        },
+      });
       console.log("password correct and box checked");
       return setPasswordErr(false);
     }
-  }, [id, password, passwordConfirm]);
+  }, [id, nickName, password, passwordConfirm]);
 
   const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);

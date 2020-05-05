@@ -10,7 +10,7 @@ import { LOG_OUT } from "../reducers/user";
 
 const Profilecard = ({}) => {
   const dispatch = useDispatch();
-  const {} = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
   return (
     <React.Fragment>
       <Card
@@ -25,8 +25,8 @@ const Profilecard = ({}) => {
           avatar={
             <Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />
           }
-          title={"id"}
-          description={"description"}
+          title={me.userId}
+          description={me.nickname}
         />
       </Card>
       <Button

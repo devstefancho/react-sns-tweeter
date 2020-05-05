@@ -6,20 +6,17 @@ export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
 export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
 
 export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
+export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
+export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
 
 // dummy User
-const dummy = {
-  id: 1,
-  nickName: "stefan",
-  password: "12345",
-};
 
 export const initialState = {
   isLogged: false,
   isLogging: false,
   isSigned: false,
   isSigningUp: false,
-  me: null,
+  me: "",
   userInfo: {
     // 남의 정보
     id: "",
@@ -40,13 +37,13 @@ const reducer = (state = initialState, action) => {
   switch (action.type) {
     //LOG_IN, LOG_OUT
     case LOG_IN_REQUEST:
-      return { ...state, isLogged: false, isLogging: true, me: null };
+      return { ...state, isLogging: true };
     case LOG_IN_SUCCESS:
       return {
         ...state,
         isLogged: true,
         isLogging: false,
-        me: dummy,
+        me: action.data, // signup.js에서 dispatch에 data를 넣어줌. (onSubmit의 else에 위치)
       };
     case LOG_IN_FAILURE:
       return {
@@ -54,7 +51,6 @@ const reducer = (state = initialState, action) => {
         isLogged: false,
         isLogging: false,
         me: null,
-        error: e,
       };
 
     case LOG_OUT_REQUEST:
@@ -70,7 +66,6 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSigned: false,
         isSigningUp: true,
-        me: action.data, // signup.js에서 dispatch에 data를 넣어줌. (onSubmit의 else에 위치)
       };
     case SIGN_UP_SUCCESS:
       return {
@@ -83,7 +78,7 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSigned: false,
         isSigningUp: false,
-        error: e,
+        // error: e,
       };
 
     default:
