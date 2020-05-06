@@ -16,9 +16,9 @@ const Profilecard = ({}) => {
       <Card
         // style={{}}
         actions={[
-          <SettingOutlined key="setting" />,
-          <EditOutlined key="edit" />,
-          <EllipsisOutlined key="ellipsis" />,
+          <div key="twit">Tweet<br />{me.Posts.length}</div>
+          <div key="following">Following<br />{me.Followings.length}</div>
+          <div key="follower">Follower<br />{me.Followers.length}</div>
         ]}
       >
         <Card.Meta
