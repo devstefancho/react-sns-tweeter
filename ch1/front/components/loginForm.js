@@ -25,7 +25,7 @@ const LoginForm = () => {
       },
     });
   }, [loginId, loginPassword]);
-  // const { isLogged } = useSelector((state) => state.user);
+  // const { me } = useSelector((state) => state.user);
   return (
     <React.Fragment>
       <Form

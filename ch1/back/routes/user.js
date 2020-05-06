@@ -4,7 +4,14 @@ const db = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
 
-router.get("/", (req, res) => {});
+router.get("/", (req, res) => {
+  if (!req.user) {
+    return res.status(401).send("Please Login again");
+  }
+  const user = Object.assign({}, req.user.toJSON());
+  delete user.password;
+  return res.json(user);
+});
 router.post("/", async (req, res, next) => {
   try {
     const exUser = await db.User.findOne({
@@ -36,15 +43,15 @@ router.post("/logout", (req, res) => {
 });
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
-    try {
-      if (err) {
-        console.error(err);
-        return next(err);
-      }
-      if (info) {
-        return res.status(401).send(info.reason);
-      }
-      return req.login(user, async (loginErr) => {
+    if (err) {
+      console.error(err);
+      return next(err);
+    }
+    if (info) {
+      return res.status(401).send(info.reason);
+    }
+    return req.login(user, async (loginErr) => {
+      try {
         if (loginErr) {
           return next(loginErr);
         }
@@ -66,17 +73,16 @@ router.post("/login", (req, res, next) => {
               as: "Followers",
               attribute: ["id"],
             },
-
-            attribute[("id", "nickname", "userId")],
           ],
+          attribute: ["id", "nickname", "userId"],
         });
         console.log(fullUser);
         console.log("login success", req.user);
         return res.json(fullUser);
-      });
-    } catch (e) {
-      next(e);
-    }
+      } catch (e) {
+        next(e);
+      }
+    });
   })(req, res, next);
 });
 router.get("/:id/follow", (req, res) => {});

@@ -5,10 +5,10 @@ import { useSelector } from "react-redux";
 
 const Home = () => {
   const { mainPosts } = useSelector((state) => state.post);
-  const { isLogged } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
   return (
     <React.Fragment>
-      {isLogged && <Postform />}
+      {me && <Postform />}
       {mainPosts.map((v, i) => {
         return <PostCard key={i} post={v} />;
       })}

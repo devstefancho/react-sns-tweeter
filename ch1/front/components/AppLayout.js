@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import {
   Menu,
   Input,
@@ -14,9 +15,17 @@ import Link from "next/link";
 import LoginForm from "../components/loginForm";
 import Profilecard from "../components/profilecard";
 import { useSelector } from "react-redux";
+import { LOAD_USER_REQUEST } from "../reducers/user";
 
 const AppLayout = ({ children }) => {
-  const { isLogged } = useSelector((state) => state.user);
+  const { me } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({
+      type: LOAD_USER_REQUEST,
+    });
+  }, []);
+
   return (
     <React.Fragment>
       <Menu mode="horizontal">
@@ -30,7 +39,7 @@ const AppLayout = ({ children }) => {
             <a>Profile</a>
           </Link>
         </Menu.Item>
-        {!isLogged && (
+        {!me && (
           <Menu.Item key="signup">
             <Link href="/signup">
               <a>Sign Up</a>
@@ -49,7 +58,7 @@ const AppLayout = ({ children }) => {
       </Divider>
       <Row gutter={16}>
         <Col span={6}>
-          {isLogged ? <Profilecard></Profilecard> : <LoginForm></LoginForm>}
+          {me ? <Profilecard></Profilecard> : <LoginForm></LoginForm>}
         </Col>
         <Col span={12}>{children}</Col>
         <Col span={6}>right side menu</Col>

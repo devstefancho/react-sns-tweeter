@@ -16,9 +16,21 @@ const Profilecard = ({}) => {
       <Card
         // style={{}}
         actions={[
-          <div key="twit">Tweet<br />{me.Posts.length}</div>
-          <div key="following">Following<br />{me.Followings.length}</div>
-          <div key="follower">Follower<br />{me.Followers.length}</div>
+          <div key="twit">
+            Tweet
+            <br />
+            {me.Posts ? me.Posts.length : 0}
+          </div>,
+          <div key="following">
+            Following
+            <br />
+            {me.Followings ? me.Followings.length : 0}
+          </div>,
+          <div key="follower">
+            Follower
+            <br />
+            {me.Followers ? me.Followers.length : 0}
+          </div>,
         ]}
       >
         <Card.Meta

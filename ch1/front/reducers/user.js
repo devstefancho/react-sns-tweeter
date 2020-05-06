@@ -1,18 +1,21 @@
 export const LOG_IN_REQUEST = "LOG_IN_REQUEST";
 export const LOG_IN_SUCCESS = "LOG_IN_SUCCESS";
 export const LOG_IN_FAILURE = "LOG_IN_FAILURE";
-export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
-export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
-export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
-
 export const LOG_OUT_REQUEST = "LOG_OUT_REQUEST";
 export const LOG_OUT_SUCCESS = "LOG_OUT_SUCCESS";
 export const LOG_OUT_FAILURE = "LOG_OUT_FAILURE";
 
+export const SIGN_UP_REQUEST = "SIGN_UP_REQUEST";
+export const SIGN_UP_SUCCESS = "SIGN_UP_SUCCESS";
+export const SIGN_UP_FAILURE = "SIGN_UP_FAILURE";
+
+export const LOAD_USER_REQUEST = "LOAD_USER_REQUEST";
+export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
+export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
+
 // dummy User
 
 export const initialState = {
-  isLogged: false,
   isLogging: false,
   isSigned: false,
   isSigningUp: false,
@@ -41,14 +44,12 @@ const reducer = (state = initialState, action) => {
     case LOG_IN_SUCCESS:
       return {
         ...state,
-        isLogged: true,
         isLogging: false,
         me: action.data, // signup.js에서 dispatch에 data를 넣어줌. (onSubmit의 else에 위치)
       };
     case LOG_IN_FAILURE:
       return {
         ...state,
-        isLogged: false,
         isLogging: false,
         me: null,
       };
@@ -56,7 +57,6 @@ const reducer = (state = initialState, action) => {
     case LOG_OUT_REQUEST:
       return {
         ...state,
-        isLogged: false,
         isLogging: false,
         me: null,
       };
@@ -78,6 +78,21 @@ const reducer = (state = initialState, action) => {
         ...state,
         isSigned: false,
         isSigningUp: false,
+        // error: e,
+      };
+
+    case LOAD_USER_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_USER_SUCCESS:
+      return {
+        ...state,
+        me: action.data,
+      };
+    case LOAD_USER_FAILURE:
+      return {
+        ...state,
         // error: e,
       };
 

@@ -7,7 +7,7 @@ import { LOG_IN, LOG_OUT, loginAction, logoutAction } from "../reducers/user";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { isLogged, userInfo } = useSelector((state) => state.user);
+  const { me, userInfo } = useSelector((state) => state.user);
   // useEffect(() => {
   //   dispatch(loginAction);
   //   dispatch(logoutAction);
@@ -15,7 +15,7 @@ const Profile = () => {
 
   return (
     <React.Fragment>
-      {isLogged && <Alert message="user Login success !!" type="success" />}
+      {me && <Alert message="user Login success !!" type="success" />}
       <Nickchangeform></Nickchangeform>
 
       <List

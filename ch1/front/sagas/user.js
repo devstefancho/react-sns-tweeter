@@ -9,6 +9,9 @@ import {
   LOG_OUT_REQUEST,
   LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE,
+  LOAD_USER_REQUEST,
+  LOAD_USER_SUCCESS,
+  LOAD_USER_FAILURE,
 } from "../reducers/user";
 import axios from "axios";
 
@@ -51,7 +54,7 @@ function* logoutWatch() {
   yield takeLatest(LOG_OUT_REQUEST, logout);
 }
 
-function* signUpAPI(signupData) {
+function signUpAPI(signupData) {
   return axios.post("/user/", signupData);
 }
 
@@ -69,6 +72,29 @@ function* signUpWatch() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
+function loadUserAPI() {
+  return axios.get("/user/", { withCredentials: true });
+}
+
+function* loadUser() {
+  try {
+    const result = yield call(loadUserAPI);
+    yield put({ type: LOAD_USER_SUCCESS, data: result.data });
+  } catch (e) {
+    yield put({ type: LOAD_USER_FAILURE, error: e });
+    console.log(e);
+  }
+}
+
+function* loadUserWatch() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+
 export default function* UserSaga() {
-  yield all([fork(loginWatch), fork(signUpWatch), fork(logoutWatch)]);
+  yield all([
+    fork(loginWatch),
+    fork(signUpWatch),
+    fork(logoutWatch),
+    fork(loadUserWatch),
+  ]);
 }
