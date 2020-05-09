@@ -17,8 +17,6 @@ import axios from "axios";
 
 // ACTION_API, ACTION_NAME, ACTION_WATCH are set
 
-axios.defaults.baseURL = "http://localhost:3065/api";
-
 function loginAPI(logInAPI) {
   return axios.post("/user/login", logInAPI, {
     withCredentials: true,

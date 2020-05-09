@@ -4,30 +4,12 @@ export const ADD_POST_FAILURE = "ADD_POST_FAILURE";
 export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
 export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
 export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
+export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
+export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
+export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 
 export const initialState = {
-  mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickName: "1 cho",
-      },
-      content: "first cho",
-      img: "https://img.icons8.com/plasticine/2x/image.png",
-      Comments: [],
-    },
-    {
-      id: 2,
-      User: {
-        id: 1,
-        nickName: "2 cho",
-      },
-      content: "second Post",
-      Comments: [],
-      img: "https://img.icons8.com/plasticine/2x/image.png",
-    },
-  ],
+  mainPosts: [],
   imagePaths: [],
   isAddingPost: false,
   isAddedPost: false,
@@ -37,16 +19,6 @@ export const initialState = {
   commentErrorReason: "",
 };
 
-const dummyPost = {
-  id: 3,
-  User: {
-    id: 1,
-    nickName: "dum cho",
-  },
-  content: "dummy Post",
-  Comments: [],
-  img: "https://img.icons8.com/plasticine/2x/image.png",
-};
 const dummyComment = {
   id: 2,
   User: {
@@ -61,14 +33,13 @@ const reducer = (state = initialState, action) => {
     case ADD_POST_REQUEST:
       return {
         ...state,
-        mainPost: action.data,
         isAddedPost: false,
         isAddingPost: true,
       };
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: [dummyPost, ...state.mainPosts],
+        mainPosts: [action.data, ...state.mainPosts],
         isAddedPost: true,
         isAddingPost: false,
       };
@@ -104,9 +75,22 @@ const reducer = (state = initialState, action) => {
     case ADD_COMMENT_FAILURE:
       return {
         ...state,
-        mainPost: action.data,
         isAddedComment: false,
         commentErrorReason: false,
+      };
+
+    case LOAD_POSTS_REQUEST:
+      return {
+        ...state,
+      };
+    case LOAD_POSTS_SUCCESS:
+      return {
+        ...state,
+        mainPosts: action.data,
+      };
+    case LOAD_POSTS_FAILURE:
+      return {
+        ...state,
       };
     default:
       return { ...state };

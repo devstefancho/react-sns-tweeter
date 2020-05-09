@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Postform from "../components/postform";
 import PostCard from "../components/postcard";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { LOAD_POSTS_REQUEST } from "../reducers/post";
 
 const Home = () => {
-  const { mainPosts } = useSelector((state) => state.post);
+  const { mainPosts, isAddedPost } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({
+      type: LOAD_POSTS_REQUEST,
+    });
+  }, [isAddedPost == true]);
+
   return (
     <React.Fragment>
       {me && <Postform />}

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_COMMENT_REQUEST } from "../reducers/post";
+import { ADD_COMMENT_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
 import { Card, Button, Avatar, Input, Comment, List, Form } from "antd";
 import {
   RetweetOutlined,
@@ -56,7 +56,7 @@ const PostCard = ({ post }) => {
         extra={<Button>Follow</Button>}
       >
         <Card.Meta
-          title={post.User.nickName}
+          title={post.User.nickname}
           description={post.content}
         ></Card.Meta>
       </Card>
@@ -81,7 +81,7 @@ const PostCard = ({ post }) => {
             renderItem={(item) => (
               <li>
                 <Comment
-                  author={item.User.nickName}
+                  author={item.userId}
                   avatar={<Avatar>{item.User.nickName[0]}</Avatar>}
                   content={item.content}
                 />

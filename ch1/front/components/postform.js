@@ -15,8 +15,11 @@ const PostForm = () => {
   }, []);
 
   const onSubmit = useCallback(() => {
-    dispatch({ type: ADD_POST_REQUEST, data: { text } });
-  }, []);
+    if (!text || !text.trim()) {
+      return alert("please write something");
+    }
+    dispatch({ type: ADD_POST_REQUEST, data: { content: text.trim() } });
+  }, [text]);
 
   useEffect(() => {
     if (isAddedPost) {
