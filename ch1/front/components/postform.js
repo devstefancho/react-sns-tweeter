@@ -14,7 +14,7 @@ const PostForm = () => {
     setText(e.target.value);
   }, []);
 
-  const onSubmit = useCallback(() => {
+  const onSubmitForm = useCallback(() => {
     if (!text || !text.trim()) {
       return alert("please write something");
     }
@@ -29,7 +29,7 @@ const PostForm = () => {
 
   return (
     <React.Fragment>
-      <Form encType="multipart/form-data" onFinish={onSubmit}>
+      <Form encType="multipart/form-data" onFinish={onSubmitForm}>
         <Form.Item>
           <Input.TextArea
             maxLength={140}

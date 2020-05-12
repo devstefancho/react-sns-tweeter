@@ -39,7 +39,7 @@ const reducer = (state = initialState, action) => {
     case ADD_POST_SUCCESS:
       return {
         ...state,
-        mainPosts: [action.data, ...state.mainPosts],
+        mainPosts: [...state.mainPosts, action.data],
         isAddedPost: true,
         isAddingPost: false,
       };

@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ADD_COMMENT_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
+import Link from "next/link";
 import { Card, Button, Avatar, Input, Comment, List, Form } from "antd";
 import {
   RetweetOutlined,
@@ -8,18 +8,19 @@ import {
   MessageOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
+import { ADD_COMMENT_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const [commentText, setCommentText] = useState("");
   const { me } = useSelector((state) => state.user);
-  const { isAddedComment, isAddingComment } = useSelector(
+  const { isAddedComment, isAddingComment, isAddedPost } = useSelector(
     (state) => state.post
   );
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("effect");
+    // console.log("effect");
     setCommentText("");
   }, [isAddedComment === true]);
 
@@ -56,8 +57,36 @@ const PostCard = ({ post }) => {
         extra={<Button>Follow</Button>}
       >
         <Card.Meta
+          avatar={
+            <Link
+              href={{
+                pathname: "/user",
+                query: { id: parseInt(post.User.id) },
+              }}
+              as={`/user/${post.User.id}`}
+            >
+              <a>
+                <Avatar>{post.User.nickname[0]}</Avatar>
+              </a>
+            </Link>
+          }
           title={post.User.nickname}
-          description={post.content}
+          description={post.content.split(/(#[^\s]+)/g).map((v) => {
+            if (v.includes("#")) {
+              const hashtag = v;
+              return (
+                <Link
+                  key={v}
+                  href={{ pathname: "/hashtag", query: { tag: v.slice(1) } }}
+                  as={`/hashtag/${v.slice(1)}`}
+                >
+                  <a>{hashtag}</a>
+                </Link>
+              );
+            } else {
+              return v;
+            }
+          })}
         ></Card.Meta>
       </Card>
       {commentFormOpened && (
