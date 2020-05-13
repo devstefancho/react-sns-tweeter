@@ -23,7 +23,7 @@ export const initialState = {
   userInfo: {
     // 남의 정보
     id: "",
-    nickName: "",
+    nickname: "",
     password: "",
   },
   followingList: [],
@@ -81,15 +81,23 @@ const reducer = (state = initialState, action) => {
         // error: e,
       };
 
-    case LOAD_USER_REQUEST:
+    case LOAD_USER_REQUEST: {
       return {
         ...state,
       };
-    case LOAD_USER_SUCCESS:
+    }
+    case LOAD_USER_SUCCESS: {
+      if (action.me) {
+        return {
+          ...state,
+          me: action.data,
+        };
+      }
       return {
         ...state,
-        me: action.data,
+        userInfo: action.data,
       };
+    }
     case LOAD_USER_FAILURE:
       return {
         ...state,

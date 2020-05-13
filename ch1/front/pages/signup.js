@@ -29,7 +29,7 @@ const Signup = () => {
   };
   const { isSigningUp, me } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput("");
-  const [nickName, onChangeNickName] = useInput("");
+  const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [passwordConfirm, onChangePasswordConfirm] = useInput("");
   const [checkBox, setCheckBox] = useState(false);
@@ -55,14 +55,14 @@ const Signup = () => {
         type: SIGN_UP_REQUEST,
         data: {
           userId: id,
-          nickname: nickName,
+          nickname: nickname,
           password: password,
         },
       });
       console.log("password correct and box checked");
       return setPasswordErr(false);
     }
-  }, [id, nickName, password, passwordConfirm]);
+  }, [id, nickname, password, passwordConfirm]);
 
   const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);
@@ -84,9 +84,9 @@ const Signup = () => {
         <Form.Item
           name="nickname"
           label="Nick Name"
-          value={nickName}
+          value={nickname}
           rules={[{ required: true }]}
-          onChange={onChangeNickName}
+          onChange={onChangeNickname}
         >
           <Input />
         </Form.Item>

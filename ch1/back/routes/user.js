@@ -34,7 +34,6 @@ router.post("/", async (req, res, next) => {
     return next(e);
   }
 });
-router.get("/:id", (req, res) => {});
 router.post("/logout", (req, res) => {
   req.logout();
   req.session.destroy();
@@ -85,10 +84,61 @@ router.post("/login", (req, res, next) => {
     });
   })(req, res, next);
 });
+router.get("/:id/", async (req, res, next) => {
+  try {
+    const userInfo = await db.User.findOne({
+      where: { id: req.params.id },
+      include: [
+        {
+          model: db.Post,
+          as: "Posts",
+          attribute: ["id"],
+        },
+        {
+          model: db.User,
+          as: "Followings",
+          attribute: ["id"],
+        },
+        {
+          model: db.User,
+          as: "Followers",
+          attribute: ["id"],
+        },
+      ],
+      attribute: ["id", "nickname", "userId"],
+      order: [["createdAt", "DESC"]],
+    });
+    const jsonUser = userInfo.toJSON();
+    jsonUser.Posts = jsonUser.Posts ? jsonUser.Posts.length : 0;
+    jsonUser.Followings = jsonUser.Followings ? jsonUser.Followings.length : 0;
+    jsonUser.Followers = jsonUser.Followers ? jsonUser.Followers.length : 0;
+    res.json(jsonUser);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 router.get("/:id/follow", (req, res) => {});
 router.post("/:id/follow", (req, res) => {});
 router.delete("/:id/follow", (req, res) => {});
 router.delete("/:id/follower", (req, res) => {});
-router.get("/:id/post", (req, res) => {});
+router.get("/:id/posts", async (req, res, next) => {
+  try {
+    const posts = await db.Post.findAll({
+      where: { UserId: parseInt(req.params.id, 10), RetweetId: null },
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    res.json(posts);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 
 module.exports = router;

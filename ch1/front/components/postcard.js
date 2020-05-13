@@ -8,7 +8,7 @@ import {
   MessageOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
-import { ADD_COMMENT_REQUEST, LOAD_POSTS_REQUEST } from "../reducers/post";
+import { ADD_COMMENT_REQUEST, LOAD_MAIN_POSTS_REQUEST } from "../reducers/post";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -58,10 +58,11 @@ const PostCard = ({ post }) => {
       >
         <Card.Meta
           avatar={
+            // <Avatar>{"dummy"}</Avatar>
             <Link
               href={{
                 pathname: "/user",
-                query: { id: parseInt(post.User.id) },
+                query: { id: post.User.id },
               }}
               as={`/user/${post.User.id}`}
             >
@@ -70,25 +71,34 @@ const PostCard = ({ post }) => {
               </a>
             </Link>
           }
+          // title="dummy"
           title={post.User.nickname}
-          description={post.content.split(/(#[^\s]+)/g).map((v) => {
-            if (v.includes("#")) {
-              const hashtag = v;
-              return (
-                <Link
-                  key={v}
-                  href={{ pathname: "/hashtag", query: { tag: v.slice(1) } }}
-                  as={`/hashtag/${v.slice(1)}`}
-                >
-                  <a>{hashtag}</a>
-                </Link>
-              );
-            } else {
-              return v;
-            }
-          })}
+          // description="dummy"
+          description={
+            post.User &&
+            post.content.split(/(#[^\s]+)/g).map((v) => {
+              if (v.includes("#")) {
+                const hashtag = v;
+                return (
+                  <Link
+                    key={v}
+                    href={{
+                      pathname: "/hashtag",
+                      query: { tag: v.slice(1) },
+                    }}
+                    as={`/hashtag/${v.slice(1)}`}
+                  >
+                    <a>{hashtag}</a>
+                  </Link>
+                );
+              } else {
+                return v;
+              }
+            })
+          }
         ></Card.Meta>
       </Card>
+
       {commentFormOpened && (
         <React.Fragment>
           <Form onFinish={onSubmitComment}>

@@ -19,7 +19,7 @@ router.post("/", async (req, res, next) => {
         )
       );
       console.log(`***** Result : ${JSON.stringify(result)} *******`);
-      await newPost.addHashtag(result.map((r) => r[0]));
+      await newPost.addHashtags(result.map((r) => r[0]));
     }
     const fullPost = await db.Post.findOne({
       //newPost(신규추가)에다가 User의 정보를 추가해서 프론트로 갖고오려고 이렇게 하는 듯
@@ -30,7 +30,7 @@ router.post("/", async (req, res, next) => {
         },
       ],
     });
-    console.log(`***** Full Post : ${fullPost} *******`);
+    console.log(`***** Full Post : ${JSON.stringify(fullPost)} *******`);
     res.json(fullPost);
   } catch (e) {
     console.error(e);

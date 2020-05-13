@@ -70,14 +70,16 @@ function* signUpWatch() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
-function loadUserAPI() {
-  return axios.get("/user/", { withCredentials: true });
+function loadUserAPI(userId) {
+  return axios.get(userId ? `/user/${userId}/` : "/user/", {
+    withCredentials: true,
+  });
 }
 
-function* loadUser() {
+function* loadUser(action) {
   try {
-    const result = yield call(loadUserAPI);
-    yield put({ type: LOAD_USER_SUCCESS, data: result.data });
+    const result = yield call(loadUserAPI, action.data);
+    yield put({ type: LOAD_USER_SUCCESS, data: result.data, me: !action.data });
   } catch (e) {
     yield put({ type: LOAD_USER_FAILURE, error: e });
     console.log(e);

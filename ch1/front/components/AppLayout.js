@@ -21,9 +21,11 @@ const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch({
-      type: LOAD_USER_REQUEST,
-    });
+    if (!me) {
+      dispatch({
+        type: LOAD_USER_REQUEST,
+      });
+    }
   }, []);
 
   return (
