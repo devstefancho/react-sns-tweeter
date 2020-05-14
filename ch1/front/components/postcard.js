@@ -76,12 +76,12 @@ const PostCard = ({ post }) => {
           // description="dummy"
           description={
             post.User &&
-            post.content.split(/(#[^\s]+)/g).map((v) => {
+            post.content.split(/(#[^\s]+)/g).map((v, i) => {
               if (v.includes("#")) {
                 const hashtag = v;
                 return (
                   <Link
-                    key={v}
+                    key={i}
                     href={{
                       pathname: "/hashtag",
                       query: { tag: v.slice(1) },

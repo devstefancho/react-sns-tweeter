@@ -19,7 +19,8 @@ const Home = () => {
     <React.Fragment>
       {me && <Postform />}
       {mainPosts.map((v, i) => {
-        return <PostCard key={+v.createdAt} post={v} />;
+        // console.log(`${JSON.stringify(v)}`);
+        return <PostCard key={i} post={v} />;
       })}
     </React.Fragment>
   );

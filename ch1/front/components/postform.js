@@ -41,9 +41,9 @@ const PostForm = () => {
 
         <Input type="file" multiple hidden></Input>
         <div>
-          {imagePaths.map((x) => {
+          {imagePaths.map((x, i) => {
             return (
-              <div key={x} style={{ display: inline - block }}>
+              <div key={i} style={{ display: inline - block }}>
                 <img
                   src={"localhost:/3050/" + x}
                   alt={x}
