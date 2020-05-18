@@ -8,7 +8,11 @@ import {
   MessageOutlined,
   EllipsisOutlined,
 } from "@ant-design/icons";
-import { ADD_COMMENT_REQUEST, LOAD_MAIN_POSTS_REQUEST } from "../reducers/post";
+import {
+  ADD_COMMENT_REQUEST,
+  LOAD_MAIN_POSTS_REQUEST,
+  LOAD_COMMENTS_REQUEST,
+} from "../reducers/post";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -25,6 +29,12 @@ const PostCard = ({ post }) => {
   }, [isAddedComment === true]);
 
   const onCommentToggle = useCallback(() => {
+    if (!commentFormOpened) {
+      dispatch({
+        type: LOAD_COMMENTS_REQUEST,
+        data: post.id,
+      });
+    }
     setCommentFormOpened((prev) => !prev);
   }, []);
 
@@ -36,10 +46,14 @@ const PostCard = ({ post }) => {
     if (!me) {
       return alert("Please Login First");
     }
-    console.log("submit");
-    console.log(post.id);
-    return dispatch({ type: ADD_COMMENT_REQUEST, data: { postId: post.id } });
-  }, [me && me.id]);
+    console.log("submit comment");
+    console.log(commentText);
+    console.log(post);
+    return dispatch({
+      type: ADD_COMMENT_REQUEST,
+      data: { content: commentText, postId: post.id },
+    });
+  }, [me, commentText]);
 
   return (
     <div>
@@ -120,8 +134,8 @@ const PostCard = ({ post }) => {
             renderItem={(item) => (
               <li>
                 <Comment
-                  author={item.userId}
-                  avatar={<Avatar>{item.User.nickName[0]}</Avatar>}
+                  author={item.User.nickname}
+                  avatar={<Avatar>{item.User.nickname.slice(0, 3)}</Avatar>}
                   content={item.content}
                 />
               </li>

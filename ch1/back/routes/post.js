@@ -39,4 +39,61 @@ router.post("/", async (req, res, next) => {
 });
 router.post("/images", (req, res) => {});
 
+router.get("/:id/comments", async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send("not found comments!");
+    }
+    const comments = await db.Comment.findAll({
+      where: { PostId: post.id },
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+    return res.json(comments);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.post("/:id/comment", async (req, res, next) => {
+  try {
+    if (!req.user) {
+      return res.status(401).send("Please Login first");
+    }
+    const post = await db.Post.findOne({ where: { id: req.params.id } });
+    if (!post) {
+      return res.status(404).send("not found Post_id");
+    }
+    // console.log(`${JSON.stringify(req.body)}`);
+    const newComment = await db.Comment.create({
+      content: req.body.content,
+      UserId: req.user.id,
+      PostId: req.params.id,
+    });
+    await post.addComment(newComment.id);
+    const comment = await db.Comment.findOne({
+      where: {
+        id: newComment.id,
+      },
+      include: [
+        {
+          model: db.User,
+          attributes: ["id", "nickname"],
+        },
+      ],
+    });
+    return res.json(comment);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
 module.exports = router;
