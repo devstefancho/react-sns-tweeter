@@ -16,6 +16,10 @@ export const LOAD_HASHTAG_POSTS_FAILURE = "LOAD_HASHTAG_POSTS_FAILURE";
 export const LOAD_USER_POSTS_REQUEST = "LOAD_USER_POSTS_REQUEST";
 export const LOAD_USER_POSTS_SUCCESS = "LOAD_USER_POSTS_SUCCESS";
 export const LOAD_USER_POSTS_FAILURE = "LOAD_USER_POSTS_FAILURE";
+export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
+export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
+export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
+export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 export const initialState = {
   mainPosts: [],
@@ -26,6 +30,7 @@ export const initialState = {
   isAddingComment: false,
   isAddedComment: false,
   commentErrorReason: "",
+  addPostErrorReason: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -80,6 +85,7 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         isAddedComment: false,
+        isAddingComment: false,
         commentErrorReason: false,
       };
     case LOAD_COMMENTS_SUCCESS: {
@@ -121,6 +127,37 @@ const reducer = (state = initialState, action) => {
         ...state,
       };
     }
+    case UPLOAD_IMAGES_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case UPLOAD_IMAGES_SUCCESS: {
+      return {
+        ...state,
+        imagePaths: [...state.imagePaths, ...action.data],
+      };
+    }
+    case UPLOAD_IMAGES_FAILURE: {
+      return {
+        ...state,
+        isAddingPost: true,
+        isAddedPost: false,
+        addPostErrorReason: "",
+      };
+    }
+
+    case REMOVE_IMAGE: {
+      console.log(`Index : ${action.data}`);
+      const remainImagePaths = state.imagePaths.filter(
+        (v, idx) => idx !== action.data
+      );
+      return {
+        ...state,
+        imagePaths: [...remainImagePaths],
+      };
+    }
+
     default:
       return { ...state };
   }

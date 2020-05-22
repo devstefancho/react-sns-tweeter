@@ -1,6 +1,11 @@
 const express = require("express");
-const router = express.Router();
+const path = require("path");
+const multer = require("multer");
+
 const db = require("../models");
+const { isLoggedIn } = require("./middleware");
+
+const router = express.Router();
 
 router.post("/", async (req, res, next) => {
   try {
@@ -37,7 +42,30 @@ router.post("/", async (req, res, next) => {
     next(e);
   }
 });
-router.post("/images", (req, res) => {});
+//setup multer
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads"); //cb는 done과 같은 것
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      cb(null, basename + new Date().valueOf() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
+
+router.post("/images", upload.array("image"), (req, res, next) => {
+  try {
+    console.log(req.files);
+    res.json(req.files.map((v) => v.filename));
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 
 router.get("/:id/comments", async (req, res, next) => {
   try {
@@ -62,11 +90,8 @@ router.get("/:id/comments", async (req, res, next) => {
   }
 });
 
-router.post("/:id/comment", async (req, res, next) => {
+router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
   try {
-    if (!req.user) {
-      return res.status(401).send("Please Login first");
-    }
     const post = await db.Post.findOne({ where: { id: req.params.id } });
     if (!post) {
       return res.status(404).send("not found Post_id");

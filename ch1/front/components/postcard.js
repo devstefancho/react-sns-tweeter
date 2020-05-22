@@ -29,6 +29,7 @@ const PostCard = ({ post }) => {
   }, [isAddedComment === true]);
 
   const onCommentToggle = useCallback(() => {
+    console.log(commentFormOpened);
     if (!commentFormOpened) {
       dispatch({
         type: LOAD_COMMENTS_REQUEST,
@@ -36,7 +37,7 @@ const PostCard = ({ post }) => {
       });
     }
     setCommentFormOpened((prev) => !prev);
-  }, []);
+  }, [commentFormOpened]);
 
   const onChangeCommentText = useCallback((e) => {
     setCommentText(e.target.value);
@@ -44,11 +45,11 @@ const PostCard = ({ post }) => {
 
   const onSubmitComment = useCallback(() => {
     if (!me) {
-      return alert("Please Login First");
+      alert("Please Login First");
     }
-    console.log("submit comment");
-    console.log(commentText);
-    console.log(post);
+    // console.log("submit comment");
+    // console.log(commentText);
+    // console.log(post);
     return dispatch({
       type: ADD_COMMENT_REQUEST,
       data: { content: commentText, postId: post.id },

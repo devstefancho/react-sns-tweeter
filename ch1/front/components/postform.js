@@ -1,7 +1,11 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { Form, Input, Button } from "antd";
 import { useSelector, useDispatch } from "react-redux";
-import { ADD_POST_REQUEST } from "../reducers/post";
+import {
+  ADD_POST_REQUEST,
+  UPLOAD_IMAGES_REQUEST,
+  REMOVE_IMAGE,
+} from "../reducers/post";
 
 const PostForm = () => {
   const { imagePaths, isAddingPost, isAddedPost } = useSelector(
@@ -9,6 +13,7 @@ const PostForm = () => {
   );
   const [text, setText] = useState("");
   const dispatch = useDispatch();
+  const imageInput = useRef();
 
   const onChangeText = useCallback((e) => {
     setText(e.target.value);
@@ -20,6 +25,31 @@ const PostForm = () => {
     }
     dispatch({ type: ADD_POST_REQUEST, data: { content: text.trim() } });
   }, [text]);
+
+  const onClickImageUpload = useCallback(() => {
+    console.log(imageInput.current);
+    imageInput.current.click();
+  }, [imageInput.current]);
+
+  const onChangeImage = useCallback((e) => {
+    console.log(e.target.files);
+    const imageFormData = new FormData();
+    [].forEach.call(e.target.files, (currentValue) => {
+      imageFormData.append("image", currentValue);
+    });
+    console.log(imageFormData.getAll("image"));
+    dispatch({
+      type: UPLOAD_IMAGES_REQUEST,
+      data: imageFormData,
+    });
+  }, []);
+
+  const onClickRemoveImage = useCallback(
+    (index) => () => {
+      dispatch({ type: REMOVE_IMAGE, data: index });
+    },
+    []
+  );
 
   useEffect(() => {
     if (isAddedPost) {
@@ -39,21 +69,14 @@ const PostForm = () => {
           ></Input.TextArea>
         </Form.Item>
 
-        <Input type="file" multiple hidden></Input>
-        <div>
-          {imagePaths.map((x, i) => {
-            return (
-              <div key={i} style={{ display: inline - block }}>
-                <img
-                  src={"localhost:/3050/" + x}
-                  alt={x}
-                  style={{ width: "200px" }}
-                ></img>
-              </div>
-            );
-          })}
-        </div>
-        <Button>Upload Image</Button>
+        <input
+          type="file"
+          multiple
+          hidden
+          ref={imageInput}
+          onChange={onChangeImage}
+        />
+        <Button onClick={onClickImageUpload}>Upload Image</Button>
         <Button
           htmlType="submit"
           type="primary"
@@ -62,6 +85,22 @@ const PostForm = () => {
         >
           Submit
         </Button>
+        <div>
+          {imagePaths.map((x, i) => {
+            return (
+              <div key={i} style={{ display: "inline - block" }}>
+                <img
+                  src={`http://localhost:3065/${x}`}
+                  alt={x}
+                  style={{ width: "200px" }}
+                ></img>
+                <div>
+                  <Button onClick={onClickRemoveImage(i)}>Delete</Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </Form>
     </React.Fragment>
   );
