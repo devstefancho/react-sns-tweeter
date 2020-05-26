@@ -23,8 +23,16 @@ const PostForm = () => {
     if (!text || !text.trim()) {
       return alert("please write something");
     }
-    dispatch({ type: ADD_POST_REQUEST, data: { content: text.trim() } });
-  }, [text]);
+    const formData = new FormData();
+    imagePaths.forEach((i) => {
+      formData.append("image", i);
+    });
+    formData.append("content", text);
+    dispatch({
+      type: ADD_POST_REQUEST,
+      data: formData,
+    });
+  }, [text, imagePaths]);
 
   const onClickImageUpload = useCallback(() => {
     console.log(imageInput.current);

@@ -6,8 +6,21 @@ const db = require("../models");
 const { isLoggedIn } = require("./middleware");
 
 const router = express.Router();
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, "uploads"); //cb는 done과 같은 것
+    },
+    filename(req, file, cb) {
+      const ext = path.extname(file.originalname);
+      const basename = path.basename(file.originalname, ext);
+      cb(null, basename + new Date().valueOf() + ext);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 },
+});
 
-router.post("/", async (req, res, next) => {
+router.post("/", upload.none(), async (req, res, next) => {
   try {
     const hashtags = req.body.content.match(/#[^\s]+/g);
     const newPost = await db.Post.create({
@@ -26,12 +39,29 @@ router.post("/", async (req, res, next) => {
       console.log(`***** Result : ${JSON.stringify(result)} *******`);
       await newPost.addHashtags(result.map((r) => r[0]));
     }
+    if (req.body.image) {
+      if (Array.isArray(req.body.image)) {
+        const images = await Promise.all(
+          req.body.image.map((image) => {
+            return db.Image.create({ src: image });
+          })
+        );
+        await newPost.addImages(images);
+      } else {
+        const image = db.Image.create({ src: req.body.image });
+        await newPost.addImage(image);
+      }
+    }
     const fullPost = await db.Post.findOne({
       //newPost(신규추가)에다가 User의 정보를 추가해서 프론트로 갖고오려고 이렇게 하는 듯
       where: { id: newPost.id },
       include: [
         {
           model: db.User,
+          attribute: ["id", "nickname"],
+        },
+        {
+          model: db.Image,
         },
       ],
     });
@@ -43,19 +73,6 @@ router.post("/", async (req, res, next) => {
   }
 });
 //setup multer
-const upload = multer({
-  storage: multer.diskStorage({
-    destination(req, file, cb) {
-      cb(null, "uploads"); //cb는 done과 같은 것
-    },
-    filename(req, file, cb) {
-      const ext = path.extname(file.originalname);
-      const basename = path.basename(file.originalname, ext);
-      cb(null, basename + new Date().valueOf() + ext);
-    },
-  }),
-  limits: { fileSize: 20 * 1024 * 1024 },
-});
 
 router.post("/images", upload.array("image"), (req, res, next) => {
   try {
