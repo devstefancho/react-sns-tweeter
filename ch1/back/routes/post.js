@@ -48,7 +48,7 @@ router.post("/", upload.none(), async (req, res, next) => {
         );
         await newPost.addImages(images);
       } else {
-        const image = db.Image.create({ src: req.body.image });
+        const image = await db.Image.create({ src: req.body.image });
         await newPost.addImage(image);
       }
     }
