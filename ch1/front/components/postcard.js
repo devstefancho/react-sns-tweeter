@@ -13,6 +13,7 @@ import {
   LOAD_MAIN_POSTS_REQUEST,
   LOAD_COMMENTS_REQUEST,
 } from "../reducers/post";
+import PostImages from "./postImages";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -61,8 +62,16 @@ const PostCard = ({ post }) => {
       <Card
         key={+post.createdAt}
         hoverable
-        style={{ width: 240, padding: 10, marginTop: 10 }}
-        cover={post.img && <img alt={post} src={post.img} />}
+        style={{ padding: 10, marginTop: 10 }}
+        cover={
+          post.Images[0] && (
+            <PostImages post={post} />
+            // <img
+            //   alt={post}
+            //   src={`http://localhost:3065/${post.Images[0].src}`}
+            // />
+          )
+        }
         actions={[
           <RetweetOutlined />,
           <HeartOutlined />,

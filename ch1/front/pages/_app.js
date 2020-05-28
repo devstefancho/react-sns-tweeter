@@ -19,6 +19,17 @@ const NodeBird = ({ Component, store, pageProps }) => {
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.1.3/antd.css" //ant-desing CDN으로 직접 css를 import하려면 웹펙에서 설정을 해줘야함
           />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            charset="UTF-8"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+          />
         </Head>
         <AppLayout>
           <Component {...pageProps} />
