@@ -63,6 +63,12 @@ router.post("/", upload.none(), async (req, res, next) => {
         {
           model: db.Image,
         },
+        {
+          model: db.User,
+          through: "Like",
+          as: "Likers",
+          attributes: ["id"],
+        },
       ],
     });
     console.log(`***** Full Post : ${JSON.stringify(fullPost)} *******`);
@@ -132,6 +138,40 @@ router.post("/:id/comment", isLoggedIn, async (req, res, next) => {
       ],
     });
     return res.json(comment);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+//Like && Unlike Post
+router.post("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: { id: req.params.id },
+    });
+    if (!post) {
+      res.status(404).send("Not Found Post!");
+    } else {
+      await post.addLiker(req.user.id);
+      res.json({ userId: req.user.id });
+    }
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.delete("/:id/like", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: { id: req.params.id },
+    });
+    if (!post) {
+      res.status(404).send("Not Found Post!");
+    } else {
+      await post.removeLiker(req.user.id);
+      res.json({ userId: req.user.id });
+    }
   } catch (e) {
     console.error(e);
     next(e);

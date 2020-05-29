@@ -7,11 +7,15 @@ import {
   HeartOutlined,
   MessageOutlined,
   EllipsisOutlined,
+  HeartTwoTone,
+  HeartFilled,
 } from "@ant-design/icons";
 import {
   ADD_COMMENT_REQUEST,
   LOAD_MAIN_POSTS_REQUEST,
   LOAD_COMMENTS_REQUEST,
+  LIKE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
 } from "../reducers/post";
 import PostImages from "./postImages";
 
@@ -22,6 +26,7 @@ const PostCard = ({ post }) => {
   const { isAddedComment, isAddingComment, isAddedPost } = useSelector(
     (state) => state.post
   );
+  const Liked = me && post.Likers && post.Likers.find((v) => me.id === v.id);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,6 +62,17 @@ const PostCard = ({ post }) => {
     });
   }, [me, commentText]);
 
+  const onLikeToggle = useCallback(() => {
+    if (!me) {
+      return alert("Please Login First");
+    }
+    if (Liked) {
+      dispatch({ type: UNLIKE_POST_REQUEST, data: post.id });
+    } else {
+      dispatch({ type: LIKE_POST_REQUEST, data: post.id });
+    }
+  }, [me && me.id, post && post.id, Liked]);
+
   return (
     <div>
       <Card
@@ -72,12 +88,24 @@ const PostCard = ({ post }) => {
             // />
           )
         }
-        actions={[
-          <RetweetOutlined />,
-          <HeartOutlined />,
-          <MessageOutlined onClick={onCommentToggle} />,
-          <EllipsisOutlined />,
-        ]}
+        actions={
+          Liked
+            ? [
+                <RetweetOutlined />,
+                <HeartFilled
+                  style={{ color: "#eb2f96" }}
+                  onClick={onLikeToggle}
+                />,
+                <MessageOutlined onClick={onCommentToggle} />,
+                <EllipsisOutlined />,
+              ]
+            : [
+                <RetweetOutlined />,
+                <HeartOutlined onClick={onLikeToggle} />,
+                <MessageOutlined onClick={onCommentToggle} />,
+                <EllipsisOutlined />,
+              ]
+        }
         extra={<Button>Follow</Button>}
       >
         <Card.Meta
