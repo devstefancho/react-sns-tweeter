@@ -12,6 +12,12 @@ import {
   LOAD_USER_REQUEST,
   LOAD_USER_SUCCESS,
   LOAD_USER_FAILURE,
+  FOLLOW_REQUEST,
+  FOLLOW_FAILURE,
+  FOLLOW_SUCCESS,
+  UNFOLLOW_REQUEST,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
 } from "../reducers/user";
 import axios from "axios";
 
@@ -90,11 +96,53 @@ function* loadUserWatch() {
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
 
+function followAPI(userId) {
+  return axios.post(
+    `/user/${userId}/follow`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+}
+function* follow(action) {
+  try {
+    const result = yield call(followAPI, action.data);
+    yield put({ type: FOLLOW_SUCCESS, data: result.data });
+  } catch (e) {
+    yield put({ type: FOLLOW_FAILURE, error: e });
+    console.log(e);
+  }
+}
+function* followWatch() {
+  yield takeLatest(FOLLOW_REQUEST, follow);
+}
+
+function unfollowAPI(userId) {
+  return axios.delete(`/user/${userId}/follow`, {
+    withCredentials: true,
+  });
+}
+function* unfollow(action) {
+  try {
+    const result = yield call(unfollowAPI, action.data);
+    yield put({ type: UNFOLLOW_SUCCESS, data: result.data });
+  } catch (e) {
+    yield put({ type: UNFOLLOW_FAILURE, error: e });
+    console.log(e);
+  }
+}
+function* unfollowWatch() {
+  yield takeLatest(UNFOLLOW_REQUEST, unfollow);
+}
+
 export default function* UserSaga() {
   yield all([
     fork(loginWatch),
     fork(signUpWatch),
     fork(logoutWatch),
     fork(loadUserWatch),
+    fork(followWatch),
+    fork(unfollowWatch),
   ]);
 }

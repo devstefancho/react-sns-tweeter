@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../models");
 const bcrypt = require("bcrypt");
 const passport = require("passport");
+const { isLoggedIn } = require("./middleware");
 
 router.get("/", (req, res) => {
   if (!req.user) {
@@ -119,9 +120,31 @@ router.get("/:id/", async (req, res, next) => {
   }
 });
 router.get("/:id/follow", (req, res) => {});
-router.post("/:id/follow", (req, res) => {});
-router.delete("/:id/follow", (req, res) => {});
-router.delete("/:id/follower", (req, res) => {});
+router.post("/:id/follow", async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: req.user.id },
+    });
+    await me.addFollowing(req.params.id);
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: req.user.id },
+    });
+    await me.removeFollowing(req.params.id);
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.delete("/:id/follower", isLoggedIn, (req, res) => {});
 router.get("/:id/posts", async (req, res, next) => {
   try {
     const posts = await db.Post.findAll({

@@ -13,21 +13,25 @@ export const LOAD_USER_REQUEST = "LOAD_USER_REQUEST";
 export const LOAD_USER_SUCCESS = "LOAD_USER_SUCCESS";
 export const LOAD_USER_FAILURE = "LOAD_USER_FAILURE";
 
-// dummy User
+export const FOLLOW_REQUEST = "FOLLOW_REQUEST";
+export const FOLLOW_SUCCESS = "FOLLOW_SUCCESS";
+export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
+
+export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
+export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
+export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 
 export const initialState = {
   isLogging: false,
   isSigned: false,
   isSigningUp: false,
-  me: "",
+  me: null,
   userInfo: {
     // 남의 정보
     id: "",
     nickname: "",
     password: "",
   },
-  followingList: [],
-  followerList: [],
   error: "",
 };
 
@@ -102,6 +106,43 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         // error: e,
+      };
+
+    case FOLLOW_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case FOLLOW_SUCCESS: {
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Followings: [{ id: action.data }, ...state.me.Followings],
+        },
+      };
+    }
+    case FOLLOW_FAILURE:
+      return {
+        ...state,
+      };
+    case UNFOLLOW_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case UNFOLLOW_SUCCESS: {
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Followings: state.me.Followings.filter((v) => v.id !== action.data),
+        },
+      };
+    }
+    case UNFOLLOW_FAILURE:
+      return {
+        ...state,
       };
 
     default:

@@ -20,14 +20,18 @@ import {
 } from "../reducers/post";
 import PostImages from "./postImages";
 import PostCardContent from "./PostCardContent";
+import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const [commentText, setCommentText] = useState("");
   const { me } = useSelector((state) => state.user);
-  const { isAddedComment, isAddingComment, isAddedPost } = useSelector(
-    (state) => state.post
-  );
+  const {
+    isAddedComment,
+    isAddingComment,
+    isAddedPost,
+    mainPosts,
+  } = useSelector((state) => state.post);
   const Liked = me && post.Likers && post.Likers.find((v) => me.id === v.id);
   const dispatch = useDispatch();
 
@@ -82,6 +86,25 @@ const PostCard = ({ post }) => {
     });
   }, [me && me.id, post && post.id]);
 
+  const onClickUnfollow = useCallback(
+    (postUserId) => () => {
+      dispatch({
+        type: UNFOLLOW_REQUEST,
+        data: postUserId,
+      });
+    },
+    []
+  );
+  const onClickFollow = useCallback(
+    (postUserId) => () => {
+      dispatch({
+        type: FOLLOW_REQUEST,
+        data: postUserId,
+      });
+    },
+    []
+  );
+
   return (
     <div>
       <Card
@@ -119,7 +142,14 @@ const PostCard = ({ post }) => {
                 <EllipsisOutlined />,
               ]
         }
-        extra={<Button>Follow</Button>}
+        extra={
+          !me || post.User.id === me.id ? null : me.Followings &&
+            me.Followings.find((v) => v.id === post.User.id) ? (
+            <Button onClick={onClickUnfollow(post.User.id)}>UNFOLLOW</Button>
+          ) : (
+            <Button onClick={onClickFollow(post.User.id)}>FOLLOW</Button>
+          )
+        }
       >
         {post.RetweetId && post.Retweet ? (
           <Card
