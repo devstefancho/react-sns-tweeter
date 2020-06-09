@@ -21,6 +21,19 @@ router.get("/:tag", async (req, res, next) => {
         {
           model: db.Image,
         },
+        {
+          model: db.Post,
+          as: "Retweet",
+          include: [
+            {
+              model: db.User,
+              attributes: ["id", "nickname"],
+            },
+            {
+              model: db.Image,
+            },
+          ],
+        },
       ],
     });
     res.json(hashtagPosts);

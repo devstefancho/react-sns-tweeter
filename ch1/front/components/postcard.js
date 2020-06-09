@@ -16,8 +16,10 @@ import {
   LOAD_COMMENTS_REQUEST,
   LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
+  RETWEET_REQUEST,
 } from "../reducers/post";
 import PostImages from "./postImages";
+import PostCardContent from "./PostCardContent";
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -73,15 +75,26 @@ const PostCard = ({ post }) => {
     }
   }, [me && me.id, post && post.id, Liked]);
 
+  const onRetweet = useCallback(() => {
+    dispatch({
+      type: RETWEET_REQUEST,
+      data: post.id,
+    });
+  }, [me && me.id, post && post.id]);
+
   return (
     <div>
       <Card
+        title={
+          post.RetweetId ? `${post.User.nickname}님이 리트윗 되었습니다.` : null
+        }
         key={+post.createdAt}
         hoverable
         style={{ padding: 10, marginTop: 10 }}
         cover={
+          post.Images &&
           post.Images[0] && (
-            <PostImages post={post} />
+            <PostImages image={post.Images} />
             // <img
             //   alt={post}
             //   src={`http://localhost:3065/${post.Images[0].src}`}
@@ -91,7 +104,7 @@ const PostCard = ({ post }) => {
         actions={
           Liked
             ? [
-                <RetweetOutlined />,
+                <RetweetOutlined onClick={onRetweet} />,
                 <HeartFilled
                   style={{ color: "#eb2f96" }}
                   onClick={onLikeToggle}
@@ -100,7 +113,7 @@ const PostCard = ({ post }) => {
                 <EllipsisOutlined />,
               ]
             : [
-                <RetweetOutlined />,
+                <RetweetOutlined onClick={onRetweet} />,
                 <HeartOutlined onClick={onLikeToggle} />,
                 <MessageOutlined onClick={onCommentToggle} />,
                 <EllipsisOutlined />,
@@ -108,47 +121,57 @@ const PostCard = ({ post }) => {
         }
         extra={<Button>Follow</Button>}
       >
-        <Card.Meta
-          avatar={
-            // <Avatar>{"dummy"}</Avatar>
-            <Link
-              href={{
-                pathname: "/user",
-                query: { id: post.User.id },
-              }}
-              as={`/user/${post.User.id}`}
-            >
-              <a>
-                <Avatar>{post.User.nickname[0]}</Avatar>
-              </a>
-            </Link>
-          }
-          // title="dummy"
-          title={post.User.nickname}
-          // description="dummy"
-          description={
-            post.User &&
-            post.content.split(/(#[^\s]+)/g).map((v, i) => {
-              if (v.includes("#")) {
-                const hashtag = v;
-                return (
-                  <Link
-                    key={i}
-                    href={{
-                      pathname: "/hashtag",
-                      query: { tag: v.slice(1) },
-                    }}
-                    as={`/hashtag/${v.slice(1)}`}
-                  >
-                    <a>{hashtag}</a>
-                  </Link>
-                );
-              } else {
-                return v;
+        {post.RetweetId && post.Retweet ? (
+          <Card
+            cover={
+              post.Retweet.Images[0] && (
+                <PostImages image={post.Retweet.Images}></PostImages>
+              )
+            }
+          >
+            <Card.Meta
+              avatar={
+                // <Avatar>{"dummy"}</Avatar>
+                <Link
+                  href={{
+                    pathname: "/user",
+                    query: { id: post.Retweet.User.id },
+                  }}
+                  as={`/user/${post.Retweet.User.id}`}
+                >
+                  <a>
+                    <Avatar>{post.Retweet.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
               }
-            })
-          }
-        ></Card.Meta>
+              // title="dummy"
+              title={post.Retweet.User.nickname}
+              // description="dummy"
+              description={<PostCardContent postData={post.Retweet.content} />}
+            ></Card.Meta>
+          </Card>
+        ) : (
+          <Card.Meta
+            avatar={
+              // <Avatar>{"dummy"}</Avatar>
+              <Link
+                href={{
+                  pathname: "/user",
+                  query: { id: post.User.id },
+                }}
+                as={`/user/${post.User.id}`}
+              >
+                <a>
+                  <Avatar>{post.User.nickname[0]}</Avatar>
+                </a>
+              </Link>
+            }
+            // title="dummy"
+            title={post.User.nickname}
+            // description="dummy"
+            description={<PostCardContent postData={post.content} />}
+          ></Card.Meta>
+        )}
       </Card>
 
       {commentFormOpened && (

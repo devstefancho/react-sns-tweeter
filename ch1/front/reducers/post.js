@@ -26,6 +26,9 @@ export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
 export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
 export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
+export const RETWEET_REQUEST = "RETWEET_REQUEST";
+export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
+export const RETWEET_FAILURE = "RETWEET_FAILURE";
 
 export const initialState = {
   mainPosts: [],
@@ -207,6 +210,22 @@ const reducer = (state = initialState, action) => {
       };
     }
     case LIKE_POST_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+    case RETWEET_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case RETWEET_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: [action.data, ...state.mainPosts],
+      };
+    }
+    case RETWEET_FAILURE: {
       return {
         ...state,
       };

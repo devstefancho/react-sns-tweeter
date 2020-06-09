@@ -27,7 +27,7 @@ const Signup = () => {
     labelCol: { span: 12 },
     // wrapperCol: { span: 6 },
   };
-  const { isSigningUp, me } = useSelector((state) => state.user);
+  const { isSigningUp, isSigned, me } = useSelector((state) => state.user);
   const [id, onChangeId] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
   const [password, onChangePassword] = useInput("");
@@ -67,62 +67,77 @@ const Signup = () => {
   const onChangeCheckBox = useCallback((e) => {
     setCheckBoxErr(checkBox);
     setCheckBox(e.target.checked);
-  });
+  }, []);
 
   return (
     <React.Fragment>
-      <Form {...layout} onFinish={onSubmit} validateMessages={validateMessages}>
-        <Form.Item
-          name="id"
-          label="ID"
-          value={id}
-          rules={[{ required: true }]}
-          onChange={onChangeId}
+      {isSigned ? (
+        Router.push("/")
+      ) : (
+        <Form
+          {...layout}
+          onFinish={onSubmit}
+          validateMessages={validateMessages}
         >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="nickname"
-          label="Nick Name"
-          value={nickname}
-          rules={[{ required: true }]}
-          onChange={onChangeNickname}
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          name="password"
-          label="Password"
-          value={password}
-          rules={[{ required: true }]}
-          onChange={onChangePassword}
-        >
-          <Input.Password />
-        </Form.Item>
-        <Form.Item
-          label="passwordConfirm"
-          name="passwordConfirm"
-          value={passwordConfirm}
-          rules={[{ required: true }]}
-          onChange={onChangePasswordConfirm}
-        >
-          <Input.Password />
-        </Form.Item>
-        {passwordErr && <div style={{ color: "red" }}>Password is invalid</div>}
-        <Checkbox onChange={onChangeCheckBox} style={{ marginBottom: "20px" }}>
-          Confirm it?
-        </Checkbox>
-        {checkBoxErr && <div style={{ color: "red" }}>Should be Checked!</div>}
-        <br />
-        <Button
-          type="primary"
-          htmlType="submit"
-          value={checkBox}
-          loading={isSigningUp}
-        >
-          SUBMIT
-        </Button>
-      </Form>
+          <Form.Item
+            name="id"
+            label="ID"
+            value={id}
+            rules={[{ required: true }]}
+            onChange={onChangeId}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="nickname"
+            label="Nick Name"
+            value={nickname}
+            rules={[{ required: true }]}
+            onChange={onChangeNickname}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="Password"
+            value={password}
+            rules={[{ required: true }]}
+            onChange={onChangePassword}
+          >
+            <Input.Password />
+          </Form.Item>
+          <Form.Item
+            label="passwordConfirm"
+            name="passwordConfirm"
+            value={passwordConfirm}
+            rules={[{ required: true }]}
+            onChange={onChangePasswordConfirm}
+          >
+            <Input.Password />
+          </Form.Item>
+          {passwordErr && (
+            <div style={{ color: "red" }}>Password is invalid</div>
+          )}
+          <Checkbox
+            onChange={onChangeCheckBox}
+            style={{ marginBottom: "20px" }}
+          >
+            Confirm it?
+          </Checkbox>
+          {checkBoxErr && (
+            <div style={{ color: "red" }}>Should be Checked!</div>
+          )}
+          <br />
+          <Button
+            type="primary"
+            htmlType="submit"
+            value={checkBox}
+            loading={isSigningUp}
+          >
+            SUBMIT
+          </Button>
+        </Form>
+      )}
     </React.Fragment>
   );
 };
