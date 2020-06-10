@@ -141,7 +141,6 @@ router.get("/:id/", async (req, res, next) => {
     next(e);
   }
 });
-router.get("/:id/follow", (req, res) => {});
 router.post("/:id/follow", async (req, res, next) => {
   try {
     const me = await db.User.findOne({
@@ -166,7 +165,6 @@ router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
     next(e);
   }
 });
-router.delete("/:id/follower", isLoggedIn, (req, res) => {});
 router.get("/:id/posts", async (req, res, next) => {
   try {
     const posts = await db.Post.findAll({
@@ -183,6 +181,47 @@ router.get("/:id/posts", async (req, res, next) => {
       order: [["createdAt", "DESC"]],
     });
     res.json(posts);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+
+router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: parseInt(req.user.id, 10) },
+    });
+    const followers = await me.getFollowers({
+      attributes: ["id", "nickname"],
+    });
+    res.json(followers);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: parseInt(req.user.id, 10) },
+    });
+    await me.removeFollower(req.params.id);
+    res.json(parseInt(req.params.id, 10));
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
+router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
+  try {
+    const me = await db.User.findOne({
+      where: { id: parseInt(req.user.id, 10) },
+    });
+    const followings = await me.getFollowings({
+      attributes: ["id", "nickname"],
+    });
+    res.json(followings);
   } catch (e) {
     console.error(e);
     next(e);
