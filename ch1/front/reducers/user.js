@@ -21,6 +21,8 @@ export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 
+export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
+
 export const initialState = {
   isLogging: false,
   isSigned: false,
@@ -144,6 +146,15 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
       };
+    case ADD_POST_TO_ME: {
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.data }, ...state.me.Posts],
+        },
+      };
+    }
 
     default:
       return { ...state };

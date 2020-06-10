@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Card, Avatar, Button } from "antd";
 import {
   EditOutlined,
@@ -11,6 +11,9 @@ import { LOG_OUT } from "../reducers/user";
 const Profilecard = ({}) => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
+
+  useEffect(() => {}, [me && me.id]);
+
   return (
     <React.Fragment>
       <Card
