@@ -9,11 +9,7 @@ const Home = () => {
   const { me } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch({
-      type: LOAD_MAIN_POSTS_REQUEST,
-    });
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <React.Fragment>
@@ -24,6 +20,13 @@ const Home = () => {
       })}
     </React.Fragment>
   );
+};
+
+Home.getInitialProps = async (context) => {
+  console.log(Object.keys(context));
+  context.store.dispatch({
+    type: LOAD_MAIN_POSTS_REQUEST,
+  });
 };
 
 export default Home;
