@@ -33,6 +33,10 @@ export const REMOVE_FOLLOWER_REQUEST = "REMOVE_FOLLOWER_REQUEST";
 export const REMOVE_FOLLOWER_SUCCESS = "REMOVE_FOLLOWER_SUCCESS";
 export const REMOVE_FOLLOWER_FAILURE = "REMOVE_FOLLOWER_FAILURE";
 
+export const EDIT_NICKNAME_REQUEST = "EDIT_NICKNAME_REQUEST";
+export const EDIT_NICKNAME_SUCCESS = "EDIT_NICKNAME_SUCCESS";
+export const EDIT_NICKNAME_FAILURE = "EDIT_NICKNAME_FAILURE";
+
 export const initialState = {
   isLogging: false,
   isSigned: false,
@@ -47,6 +51,8 @@ export const initialState = {
   error: "",
   followingList: [],
   followerList: [],
+  isEditting: false,
+  isEditted: false,
 };
 
 export const LOG_OUT = {
@@ -217,6 +223,31 @@ const reducer = (state = initialState, action) => {
     }
     case REMOVE_FOLLOWER_FAILURE: {
       return {
+        ...state,
+      };
+    }
+    case EDIT_NICKNAME_REQUEST: {
+      return {
+        ...state,
+        isEditting: true,
+        isEditted: false,
+      };
+    }
+    case EDIT_NICKNAME_SUCCESS: {
+      return {
+        ...state,
+        isEditting: false,
+        isEditted: true,
+        me: {
+          ...state.me,
+          nickname: action.data,
+        },
+      };
+    }
+    case EDIT_NICKNAME_FAILURE: {
+      return {
+        isEditting: false,
+        isEditted: false,
         ...state,
       };
     }
