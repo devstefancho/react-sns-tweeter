@@ -63,7 +63,7 @@ NodeBird.getInitialProps = async (context) => {
     });
   }
   if (Component.getInitialProps) {
-    pageProps = await Component.getInitialProps(ctx);
+    pageProps = (await Component.getInitialProps(ctx)) || {};
   }
   console.log(pageProps);
   return { pageProps };

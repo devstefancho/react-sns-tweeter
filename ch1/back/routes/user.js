@@ -168,7 +168,11 @@ router.delete("/:id/follow", isLoggedIn, async (req, res, next) => {
 router.get("/:id/posts", async (req, res, next) => {
   try {
     const posts = await db.Post.findAll({
-      where: { UserId: parseInt(req.params.id, 10), RetweetId: null },
+      where: {
+        UserId: parseInt(req.params.id, 10) || (req.user && req.user.id) || 0,
+        // UserId: parseInt(req.params.id, 10),
+        RetweetId: null,
+      },
       include: [
         {
           model: db.User,
@@ -190,7 +194,9 @@ router.get("/:id/posts", async (req, res, next) => {
 router.get("/:id/followers", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
-      where: { id: parseInt(req.user.id, 10) },
+      where: {
+        id: parseInt(req.user.id, 10) || (req.user && req.user.id) || 0,
+      },
     });
     const followers = await me.getFollowers({
       attributes: ["id", "nickname"],
@@ -216,7 +222,9 @@ router.delete("/:id/follower", isLoggedIn, async (req, res, next) => {
 router.get("/:id/followings", isLoggedIn, async (req, res, next) => {
   try {
     const me = await db.User.findOne({
-      where: { id: parseInt(req.user.id, 10) },
+      where: {
+        id: parseInt(req.user.id, 10) || (req.user && req.user.id) || 0,
+      },
     });
     const followings = await me.getFollowings({
       attributes: ["id", "nickname"],

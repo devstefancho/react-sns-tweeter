@@ -1,13 +1,9 @@
 import React, { useEffect, useCallback } from "react";
-import { Alert, Form, Input, Button, List, Card } from "antd";
-import { StopOutlined } from "@ant-design/icons";
+import { Alert, Button, List, Card } from "antd";
+import { StopOutlined, StarTwoTone } from "@ant-design/icons";
 import Nickchangeform from "../components/nickchangeform";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  LOG_IN,
-  LOG_OUT,
-  loginAction,
-  logoutAction,
   LOAD_FOLLOWERS_REQUEST,
   LOAD_FOLLOWINGS_REQUEST,
   REMOVE_FOLLOWER_REQUEST,
@@ -22,10 +18,6 @@ const Profile = () => {
     (state) => state.user
   );
   const { mainPosts } = useSelector((state) => state.post);
-  // useEffect(() => {
-  //   dispatch(loginAction);
-  //   dispatch(logoutAction);
-  // }, []);
 
   useEffect(() => {
     if (me) {
@@ -34,7 +26,6 @@ const Profile = () => {
       dispatch({ type: LOAD_USER_POSTS_REQUEST, data: me.id });
     }
   }, [me && me.id]);
-
   const onClickRemoveFollower = useCallback(
     (unFollowingId) => () => {
       dispatch({ type: REMOVE_FOLLOWER_REQUEST, data: unFollowingId });
@@ -115,11 +106,26 @@ const Profile = () => {
           </List.Item>
         )}
       ></List>
-      {mainPosts.map((c) => (
-        <PostCard key={+c.createdAt} post={c} />
-      ))}
+      {me && mainPosts.map((c, i) => <PostCard key={i} post={c} />)}
     </React.Fragment>
   );
+};
+
+Profile.getInitialProps = async (context) => {
+  const state = context.store.getState();
+  const me = state.user.me;
+  context.store.dispatch({
+    type: LOAD_FOLLOWERS_REQUEST,
+    data: me && me.id,
+  });
+  context.store.dispatch({
+    type: LOAD_FOLLOWINGS_REQUEST,
+    data: me && me.id,
+  });
+  context.store.dispatch({
+    type: LOAD_USER_POSTS_REQUEST,
+    data: me && me.id,
+  });
 };
 
 export default Profile;

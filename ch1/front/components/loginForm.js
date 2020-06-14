@@ -2,12 +2,8 @@ import React, { useCallback } from "react";
 import { Form, Button, Input } from "antd";
 import { useInput } from "../pages/signup";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  logoutAction,
-  LOG_OUT,
-  LOG_IN,
-  LOG_IN_REQUEST,
-} from "../reducers/user";
+import { LOG_IN_REQUEST } from "../reducers/user";
+import { LOAD_USER_POSTS_REQUEST } from "../reducers/post";
 
 const LoginForm = () => {
   const [loginId, onChangeLoginId] = useInput("");
