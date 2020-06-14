@@ -13,12 +13,15 @@ import {
   REMOVE_FOLLOWER_REQUEST,
   UNFOLLOW_REQUEST,
 } from "../reducers/user";
+import { LOAD_USER_POSTS_REQUEST } from "../reducers/post";
+import PostCard from "../components/postcard";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { me, userInfo, followerList, followingList } = useSelector(
+  const { me, followerList, followingList } = useSelector(
     (state) => state.user
   );
+  const { mainPosts } = useSelector((state) => state.post);
   // useEffect(() => {
   //   dispatch(loginAction);
   //   dispatch(logoutAction);
@@ -28,6 +31,7 @@ const Profile = () => {
     if (me) {
       dispatch({ type: LOAD_FOLLOWERS_REQUEST, data: me.id });
       dispatch({ type: LOAD_FOLLOWINGS_REQUEST, data: me.id });
+      dispatch({ type: LOAD_USER_POSTS_REQUEST, data: me.id });
     }
   }, [me && me.id]);
 
@@ -111,6 +115,9 @@ const Profile = () => {
           </List.Item>
         )}
       ></List>
+      {mainPosts.map((c) => (
+        <PostCard key={+c.createdAt} post={c} />
+      ))}
     </React.Fragment>
   );
 };
