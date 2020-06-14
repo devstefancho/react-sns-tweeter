@@ -11,10 +11,6 @@ const User = ({ id }) => {
   const { userInfo } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch({ type: LOAD_USER_POSTS_REQUEST, data: id });
-  }, []);
-
   return (
     <div>
       {userInfo ? (
@@ -62,7 +58,12 @@ User.propType = {
 
 User.getInitialProps = (context) => {
   console.log(context.query.id);
-  return { id: parseInt(context.query.id) };
+  const id = parseInt(context.query.id);
+  context.store.dispatch({
+    type: LOAD_USER_POSTS_REQUEST,
+    data: id,
+  });
+  return { id };
 };
 
 export default User;

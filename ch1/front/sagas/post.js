@@ -123,7 +123,7 @@ function* loadPostsWatch() {
 }
 
 function loadHashtagPostsAPI(tag) {
-  return axios.get(`/hashtag/${tag}`);
+  return axios.get(`/hashtag/${encodeURIComponent(tag)}`);
 }
 function* loadHashtagPosts(action) {
   try {

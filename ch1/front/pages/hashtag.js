@@ -6,10 +6,6 @@ import { LOAD_HASHTAG_POSTS_REQUEST } from "../reducers/post";
 
 const Hashtag = ({ tag }) => {
   const { mainPosts } = useSelector((state) => state.post);
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch({ type: LOAD_HASHTAG_POSTS_REQUEST, data: tag });
-  }, []);
   return (
     <div>
       {mainPosts.map((v, i) => {
@@ -25,7 +21,12 @@ Hashtag.propType = {
 
 Hashtag.getInitialProps = (context) => {
   console.log("hashtag getInitialProps ***", context.query.tag);
-  return { tag: context.query.tag };
+  const tag = context.query.tag;
+  context.store.dispatch({
+    type: LOAD_HASHTAG_POSTS_REQUEST,
+    data: tag,
+  });
+  return { tag };
 };
 
 export default Hashtag;
