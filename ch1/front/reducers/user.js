@@ -85,6 +85,8 @@ const reducer = (state = initialState, action) => {
         ...state,
         isLogging: false,
         me: null,
+        followingList: [],
+        followerList: [],
       };
     // SIGN_UP
     case SIGN_UP_REQUEST:
@@ -184,7 +186,7 @@ const reducer = (state = initialState, action) => {
     case LOAD_FOLLOWERS_SUCCESS: {
       return {
         ...state,
-        followerList: action.data,
+        followerList: state.followerList.concat(action.data),
       };
     }
     case LOAD_FOLLOWERS_FAILURE: {
@@ -200,7 +202,7 @@ const reducer = (state = initialState, action) => {
     case LOAD_FOLLOWINGS_SUCCESS: {
       return {
         ...state,
-        followingList: action.data,
+        followingList: state.followingList.concat(action.data),
       };
     }
     case LOAD_FOLLOWINGS_FAILURE: {

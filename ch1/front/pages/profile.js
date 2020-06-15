@@ -38,6 +38,12 @@ const Profile = () => {
     },
     []
   );
+  const onLoadMoreFollowers = useCallback(() => {
+    dispatch({ type: LOAD_FOLLOWERS_REQUEST, offset: followerList.length });
+  }, [followerList && followerList.length]);
+  const onLoadMoreFollowings = useCallback(() => {
+    dispatch({ type: LOAD_FOLLOWINGS_REQUEST, offset: followingList.length });
+  }, [followerList && followingList.length]);
 
   return (
     <React.Fragment>
@@ -59,7 +65,7 @@ const Profile = () => {
               lineHeight: "32px",
             }}
           >
-            <Button>More</Button>
+            <Button onClick={onLoadMoreFollowings}>More</Button>
           </div>
         }
         bordered
@@ -90,7 +96,7 @@ const Profile = () => {
               lineHeight: "32px",
             }}
           >
-            <Button>More</Button>
+            <Button onClick={onLoadMoreFollowers}>More</Button>
           </div>
         }
         bordered
