@@ -19,7 +19,6 @@ export const LOAD_USER_POSTS_FAILURE = "LOAD_USER_POSTS_FAILURE";
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
 export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
-export const REMOVE_IMAGE = "REMOVE_IMAGE";
 export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
@@ -29,6 +28,11 @@ export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
 export const RETWEET_REQUEST = "RETWEET_REQUEST";
 export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
 export const RETWEET_FAILURE = "RETWEET_FAILURE";
+export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
+export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
+export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE";
+
+export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 export const initialState = {
   mainPosts: [],
@@ -226,6 +230,22 @@ const reducer = (state = initialState, action) => {
       };
     }
     case RETWEET_FAILURE: {
+      return {
+        ...state,
+      };
+    }
+    case REMOVE_POST_REQUEST: {
+      return {
+        ...state,
+      };
+    }
+    case REMOVE_POST_SUCCESS: {
+      return {
+        ...state,
+        mainPosts: state.mainPosts.filter((v) => v.id !== action.data),
+      };
+    }
+    case REMOVE_POST_FAILURE: {
       return {
         ...state,
       };

@@ -69,6 +69,10 @@ const Signup = () => {
     setCheckBox(e.target.checked);
   }, []);
 
+  if (me) {
+    return null;
+  }
+
   return (
     <React.Fragment>
       {isSigned ? (

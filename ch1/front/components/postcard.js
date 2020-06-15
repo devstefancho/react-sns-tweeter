@@ -1,7 +1,16 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import { Card, Button, Avatar, Input, Comment, List, Form } from "antd";
+import {
+  Card,
+  Button,
+  Avatar,
+  Input,
+  Comment,
+  List,
+  Form,
+  Popover,
+} from "antd";
 import {
   RetweetOutlined,
   HeartOutlined,
@@ -17,6 +26,7 @@ import {
   LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
   RETWEET_REQUEST,
+  REMOVE_POST_REQUEST,
 } from "../reducers/post";
 import PostImages from "./postImages";
 import PostCardContent from "./PostCardContent";
@@ -105,6 +115,16 @@ const PostCard = ({ post }) => {
     []
   );
 
+  const onClickDeletePost = useCallback(
+    (postId) => () => {
+      dispatch({
+        type: REMOVE_POST_REQUEST,
+        data: postId,
+      });
+    },
+    []
+  );
+
   return (
     <div>
       <Card
@@ -133,13 +153,45 @@ const PostCard = ({ post }) => {
                   onClick={onLikeToggle}
                 />,
                 <MessageOutlined onClick={onCommentToggle} />,
-                <EllipsisOutlined />,
+                <Popover
+                  content={
+                    <div>
+                      {me && post.UserId === me.id ? (
+                        <React.Fragment>
+                          <p>Amend</p>
+                          <p onClick={onClickDeletePost(post.id)}>Delete</p>
+                        </React.Fragment>
+                      ) : (
+                        <p>Report</p>
+                      )}
+                    </div>
+                  }
+                  trigger="hover"
+                >
+                  <EllipsisOutlined />
+                </Popover>,
               ]
             : [
                 <RetweetOutlined onClick={onRetweet} />,
                 <HeartOutlined onClick={onLikeToggle} />,
                 <MessageOutlined onClick={onCommentToggle} />,
-                <EllipsisOutlined />,
+                <Popover
+                  content={
+                    <div>
+                      {me && post.UserId === me.id ? (
+                        <React.Fragment>
+                          <p>Amend</p>
+                          <p onClick={onClickDeletePost(post.id)}>Delete</p>
+                        </React.Fragment>
+                      ) : (
+                        <p>Report</p>
+                      )}
+                    </div>
+                  }
+                  trigger="hover"
+                >
+                  <EllipsisOutlined />
+                </Popover>,
               ]
         }
         extra={

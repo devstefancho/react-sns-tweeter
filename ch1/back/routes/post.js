@@ -241,5 +241,20 @@ router.post("/:id/retweet", isLoggedIn, async (req, res, next) => {
     next(e);
   }
 });
+router.delete("/:id/delete", isLoggedIn, async (req, res, next) => {
+  try {
+    const post = await db.Post.findOne({
+      where: { id: req.params.id },
+    });
+    if (!post) {
+      res.status(404).send("Not Found Post");
+    }
+    await db.Post.destroy({ where: { id: req.params.id } });
+    res.send(req.params.id);
+  } catch (e) {
+    console.error(e);
+    next(e);
+  }
+});
 
 module.exports = router;
