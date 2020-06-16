@@ -14,9 +14,13 @@ import PostCard from "../components/postcard";
 
 const Profile = () => {
   const dispatch = useDispatch();
-  const { me, followerList, followingList } = useSelector(
-    (state) => state.user
-  );
+  const {
+    me,
+    followerList,
+    followingList,
+    hasMoreFollower,
+    hasMoreFollowing,
+  } = useSelector((state) => state.user);
   const { mainPosts } = useSelector((state) => state.post);
 
   useEffect(() => {
@@ -65,7 +69,9 @@ const Profile = () => {
               lineHeight: "32px",
             }}
           >
-            <Button onClick={onLoadMoreFollowings}>More</Button>
+            {hasMoreFollowing && (
+              <Button onClick={onLoadMoreFollowings}>More</Button>
+            )}
           </div>
         }
         bordered
@@ -96,7 +102,9 @@ const Profile = () => {
               lineHeight: "32px",
             }}
           >
-            <Button onClick={onLoadMoreFollowers}>More</Button>
+            {hasMoreFollower && (
+              <Button onClick={onLoadMoreFollowers}>More</Button>
+            )}
           </div>
         }
         bordered
