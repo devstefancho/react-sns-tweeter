@@ -105,12 +105,12 @@ function* loadComments(action) {
 function* loadCommentsWatch() {
   yield takeLatest(LOAD_COMMENTS_REQUEST, loadComments);
 }
-function loadPostsAPI() {
-  return axios.get("/posts");
+function loadMainPostsAPI(lastId, limit = 7) {
+  return axios.get(`/posts?lastId=${lastId}&limit=${limit}`);
 }
-function* loadPosts() {
+function* loadMainPosts(action) {
   try {
-    const result = yield call(loadPostsAPI);
+    const result = yield call(loadMainPostsAPI, action.lastId);
     // console.log(`result : `, result); // response로 json이 넘어올때 result안에 data로 넘어오는 것을 확인할 수 있음.
     yield put({
       type: LOAD_MAIN_POSTS_SUCCESS,
@@ -121,8 +121,8 @@ function* loadPosts() {
     yield put({ type: LOAD_MAIN_POSTS_FAILURE });
   }
 }
-function* loadPostsWatch() {
-  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadPosts);
+function* loadMainPostsWatch() {
+  yield takeLatest(LOAD_MAIN_POSTS_REQUEST, loadMainPosts);
 }
 
 function loadHashtagPostsAPI(tag) {
@@ -288,7 +288,7 @@ export default function* postSaga() {
     fork(addPostWatch),
     fork(addCommentWatch),
     fork(loadCommentsWatch),
-    fork(loadPostsWatch),
+    fork(loadMainPostsWatch),
     fork(loadHashtagPostsWatch),
     fork(loadUserPostsWatch),
     fork(uploadImageWatch),

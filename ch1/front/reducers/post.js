@@ -123,7 +123,7 @@ const reducer = (state = initialState, action) => {
     case LOAD_USER_POSTS_REQUEST: {
       return {
         ...state,
-        mainPosts: [],
+        mainPosts: action.lastId === 0 ? [] : state.mainPosts,
       };
     }
     case LOAD_MAIN_POSTS_SUCCESS:
@@ -131,7 +131,7 @@ const reducer = (state = initialState, action) => {
     case LOAD_USER_POSTS_SUCCESS: {
       return {
         ...state,
-        mainPosts: action.data,
+        mainPosts: state.mainPosts.concat(action.data),
       };
     }
     case LOAD_MAIN_POSTS_FAILURE:
