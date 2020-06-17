@@ -7,9 +7,35 @@ import PostCard from "../components/postcard";
 import { LOAD_USER_POSTS_REQUEST } from "../reducers/post";
 
 const User = ({ id }) => {
-  const { mainPosts } = useSelector((state) => state.post);
   const { userInfo } = useSelector((state) => state.user);
+  const { mainPosts, hasMorePost } = useSelector((state) => state.post);
   const dispatch = useDispatch();
+
+  const onScroll = () => {
+    console.log(
+      window.scrollY,
+      document.documentElement.clientHeight,
+      document.documentElement.scrollHeight
+    );
+    if (
+      window.scrollY + document.documentElement.clientHeight + 300 >
+      document.documentElement.scrollHeight
+    ) {
+      if (hasMorePost) {
+        dispatch({
+          type: LOAD_USER_POSTS_REQUEST,
+          lastId: mainPosts[mainPosts.length - 1].id,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [mainPosts.length, hasMorePost]);
 
   return (
     <div>

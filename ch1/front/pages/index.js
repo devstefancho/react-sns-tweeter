@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { LOAD_MAIN_POSTS_REQUEST } from "../reducers/post";
 
 const Home = () => {
-  const { mainPosts, isAddedPost } = useSelector((state) => state.post);
+  const { mainPosts, hasMorePost } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
@@ -19,10 +19,12 @@ const Home = () => {
       window.scrollY + document.documentElement.clientHeight + 300 >
       document.documentElement.scrollHeight
     ) {
-      dispatch({
-        type: LOAD_MAIN_POSTS_REQUEST,
-        lastId: mainPosts[mainPosts.length - 1].id,
-      });
+      if (hasMorePost) {
+        dispatch({
+          type: LOAD_MAIN_POSTS_REQUEST,
+          lastId: mainPosts[mainPosts.length - 1].id,
+        });
+      }
     }
   };
 
@@ -31,7 +33,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [mainPosts.length]);
+  }, [mainPosts.length, hasMorePost]);
 
   return (
     <React.Fragment>
