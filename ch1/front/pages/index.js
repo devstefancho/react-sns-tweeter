@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Postform from "../components/postform";
 import PostCard from "../components/postcard";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,6 +8,7 @@ const Home = () => {
   const { mainPosts, hasMorePost } = useSelector((state) => state.post);
   const { me } = useSelector((state) => state.user);
   const dispatch = useDispatch();
+  const lastIdRef = useRef([]);
 
   const onScroll = () => {
     console.log(
@@ -20,10 +21,14 @@ const Home = () => {
       document.documentElement.scrollHeight
     ) {
       if (hasMorePost) {
-        dispatch({
-          type: LOAD_MAIN_POSTS_REQUEST,
-          lastId: mainPosts[mainPosts.length - 1].id,
-        });
+        const lastId = mainPosts[mainPosts.length - 1].id;
+        if (!lastIdRef.current.includes(lastId)) {
+          dispatch({
+            type: LOAD_MAIN_POSTS_REQUEST,
+            lastId: lastId,
+          });
+          lastIdRef.current.push(lastId);
+        }
       }
     }
   };
