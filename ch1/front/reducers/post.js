@@ -33,6 +33,9 @@ export const RETWEET_FAILURE = "RETWEET_FAILURE";
 export const REMOVE_POST_REQUEST = "REMOVE_POST_REQUEST";
 export const REMOVE_POST_SUCCESS = "REMOVE_POST_SUCCESS";
 export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE";
+export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
+export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
+export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
 
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
@@ -47,6 +50,7 @@ export const initialState = {
   commentErrorReason: "",
   addPostErrorReason: "",
   hasMorePost: false,
+  singlePost: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -117,6 +121,16 @@ const reducer = (state = initialState, action) => {
       case LOAD_MAIN_POSTS_FAILURE:
       case LOAD_HASHTAG_POSTS_FAILURE:
       case LOAD_USER_POSTS_FAILURE: {
+        break;
+      }
+      case LOAD_POST_REQUEST: {
+        break;
+      }
+      case LOAD_POST_SUCCESS: {
+        draft.singlePost = action.data;
+        break;
+      }
+      case LOAD_POST_FAILURE: {
         break;
       }
       case UPLOAD_IMAGES_REQUEST: {

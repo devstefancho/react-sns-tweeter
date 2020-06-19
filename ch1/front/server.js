@@ -30,6 +30,9 @@ app.prepare().then(() => {
       },
     })
   );
+  server.get("/post/:id", (req, res) => {
+    return app.render(req, res, "/post", { id: req.params.id });
+  });
   server.get("/hashtag/:tag", (req, res) => {
     // console.log("server.get /hashtag/:tag");
     return app.render(req, res, "/hashtag", { tag: req.params.tag });
