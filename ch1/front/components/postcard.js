@@ -19,6 +19,8 @@ import {
   HeartTwoTone,
   HeartFilled,
 } from "@ant-design/icons";
+import styled from "styled-components";
+
 import {
   ADD_COMMENT_REQUEST,
   LOAD_MAIN_POSTS_REQUEST,
@@ -31,6 +33,10 @@ import {
 import PostImages from "./postImages";
 import PostCardContent from "./PostCardContent";
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
+
+const CardWrapper = styled.div`
+  margin-bottom: 40px;
+`;
 
 const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -126,7 +132,7 @@ const PostCard = ({ post }) => {
   );
 
   return (
-    <div>
+    <CardWrapper>
       <Card
         title={
           post.RetweetId ? `${post.User.nickname}님이 리트윗 되었습니다.` : null
@@ -286,7 +292,7 @@ const PostCard = ({ post }) => {
           />
         </React.Fragment>
       )}
-    </div>
+    </CardWrapper>
   );
 };
 

@@ -2,11 +2,16 @@ import React, { Component } from "react";
 import Helmet from "react-helmet";
 import Document, { Main, NextScript } from "next/document";
 import PropTypes from "prop-types";
+import { ServerStyleSheet } from "styled-components";
 
 class MyDocument extends Document {
   static getInitialProps(ctx) {
-    const page = ctx.renderPage((App) => (props) => <App {...props} />);
-    return { ...page, helmet: Helmet.renderStatic() };
+    const sheet = new ServerStyleSheet();
+    const page = ctx.renderPage((App) => (props) =>
+      sheet.collectStyles(<App {...props} />)
+    );
+    const styleTags = sheet.getStyleElement();
+    return { ...page, helmet: Helmet.renderStatic(), styleTags };
   }
   render() {
     const { htmlAttributes, bodyAttributes, ...helmet } = this.props.helmet;
@@ -15,6 +20,7 @@ class MyDocument extends Document {
     return (
       <html {...htmlAttrs}>
         <head>
+          {this.props.styleTags}
           {Object.values(helmet).map((el) => el.toComponent())}
           <title>This is single post</title>
         </head>
@@ -29,6 +35,7 @@ class MyDocument extends Document {
 
 MyDocument.propTypes = {
   helmet: PropTypes.object.isRequired,
+  styleTags: PropTypes.object.isRequired,
 };
 
 export default MyDocument;

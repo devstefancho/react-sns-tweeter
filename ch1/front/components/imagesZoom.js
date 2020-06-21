@@ -1,6 +1,49 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
 import { CloseSquareOutlined } from "@ant-design/icons";
+import styled from "styled-components";
+
+const ImageWindow = styled.div`
+  position: fixed;
+  z-index: 5000;
+  width: 90%;
+  top: 20%;
+  left: 5%;
+  border: 1px solid #218cff;
+  background-color: #ffffff;
+
+  & header {
+    height: 44;
+    background-color: black;
+    position: relative;
+    padding: 0;
+    text-align: center;
+  }
+  & h1 {
+    color: #ffffff;
+    fontsize: 17px;
+    margin: 0px;
+    line-height: 44px;
+  }
+
+  & img {
+    width: 100%;
+    padding: 30px;
+    height: auto;
+  }
+`;
+
+const CloseIcon = styled(CloseSquareOutlined)`
+position: absolute;
+cursor: pointer;
+font-size: 3em;
+color: white;
+  line-height: 14px;
+  top: 0;
+  right: 0;
+  padding: 15;
+}}
+`;
 
 const ImagesZoom = ({ images, onClose }) => {
   const settings = {
@@ -11,49 +54,12 @@ const ImagesZoom = ({ images, onClose }) => {
     slidesToScroll: 3,
   };
   return (
-    <React.Fragment>
-      <div
-        style={{
-          position: "fixed",
-          zIndex: 5000,
-          width: "90%",
-          top: "20%",
-          left: "5%",
-          border: "1px solid black",
-          backgroundColor: "#ffffff",
-        }}
-      >
-        <header
-          style={{
-            height: 44,
-            background: "white",
-            position: "relative",
-            padding: 0,
-            textAlign: "center",
-          }}
-        >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "17px",
-              color: "#333",
-              lineHeight: "44px",
-            }}
-          >
-            상세 이미지
-          </h1>
+    <>
+      <ImageWindow>
+        <header>
+          <h1>상세 이미지</h1>
           <div onClick={onClose}>
-            <CloseSquareOutlined
-              style={{
-                fontSize: "3em",
-                position: "absolute",
-                right: 0,
-                top: 0,
-                padding: 15,
-                lineHeight: "14px",
-                cursor: "pointer",
-              }}
-            />
+            <CloseIcon />
           </div>
         </header>
 
@@ -66,20 +72,14 @@ const ImagesZoom = ({ images, onClose }) => {
                     key={i}
                     alt={"image"}
                     src={`http://localhost:3065/${v.src}`}
-                    style={{
-                      width: "100%",
-                      padding: 20,
-                      //   margin: "0 auto",
-                      height: "auto",
-                    }}
                   ></img>
                 </div>
               );
             })}
           </Slider>
         </div>
-      </div>
-    </React.Fragment>
+      </ImageWindow>
+    </>
   );
 };
 
