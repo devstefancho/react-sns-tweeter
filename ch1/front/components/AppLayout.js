@@ -32,18 +32,18 @@ const AppLayout = ({ children }) => {
     <React.Fragment>
       <Menu mode="horizontal">
         <Menu.Item key="nodebird">
-          <Link href="/">
+          <Link href="/" prefetch>
             <a>Node Bird</a>
           </Link>
         </Menu.Item>
         <Menu.Item key="profile">
-          <Link href="/profile">
+          <Link href="/profile" prefetch>
             <a>Profile</a>
           </Link>
         </Menu.Item>
         {!me && (
           <Menu.Item key="signup">
-            <Link href="/signup">
+            <Link href="/signup" prefetch>
               <a>Sign Up</a>
             </Link>
           </Menu.Item>

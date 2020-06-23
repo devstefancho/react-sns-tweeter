@@ -4,10 +4,13 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const dotenv = require("dotenv");
+const favicon = require("serve-favicon");
+const path = require("path");
 
 const dev = process.env.NODE_ENV !== "production";
 const prod = process.env.NODE_ENV === "production";
 
+// @ts-ignore
 const app = next({ dev });
 const handle = app.getRequestHandler();
 dotenv.config();
@@ -30,6 +33,9 @@ app.prepare().then(() => {
       },
     })
   );
+  server.use(favicon(path.join(__dirname, "public", "favicon.ico")));
+  // server.use("/", express.static(path.join(__dirname, "public")));
+
   server.get("/post/:id", (req, res) => {
     return app.render(req, res, "/post", { id: req.params.id });
   });
