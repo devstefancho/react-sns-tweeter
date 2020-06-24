@@ -20,6 +20,7 @@ import {
   HeartFilled,
 } from "@ant-design/icons";
 import styled from "styled-components";
+import moment from "moment";
 
 import {
   ADD_COMMENT_REQUEST,
@@ -50,6 +51,7 @@ const PostCard = ({ post }) => {
   } = useSelector((state) => state.post);
   const Liked = me && post.Likers && post.Likers.find((v) => me.id === v.id);
   const dispatch = useDispatch();
+  moment.locale("ko");
 
   useEffect(() => {
     // console.log("effect");
@@ -260,6 +262,7 @@ const PostCard = ({ post }) => {
             description={<PostCardContent postData={post.content} />}
           ></Card.Meta>
         )}
+        {post && moment(post.createdAt).fromNow()}
       </Card>
 
       {commentFormOpened && (
