@@ -34,29 +34,18 @@ import {
 import PostImages from "./postImages";
 import PostCardContent from "./PostCardContent";
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
+import CommentForm from "./CommentForm";
 
 const CardWrapper = styled.div`
   margin-bottom: 40px;
 `;
 
-const PostCard = ({ post }) => {
+const PostCard = React.memo(({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const [commentText, setCommentText] = useState("");
   const { me } = useSelector((state) => state.user);
-  const {
-    isAddedComment,
-    isAddingComment,
-    isAddedPost,
-    mainPosts,
-  } = useSelector((state) => state.post);
   const Liked = me && post.Likers && post.Likers.find((v) => me.id === v.id);
   const dispatch = useDispatch();
-  moment.locale("ko");
-
-  useEffect(() => {
-    // console.log("effect");
-    setCommentText("");
-  }, [isAddedComment === true]);
+  moment.locale("en");
 
   const onCommentToggle = useCallback(() => {
     console.log(commentFormOpened);
@@ -68,23 +57,6 @@ const PostCard = ({ post }) => {
     }
     setCommentFormOpened((prev) => !prev);
   }, [commentFormOpened]);
-
-  const onChangeCommentText = useCallback((e) => {
-    setCommentText(e.target.value);
-  }, []);
-
-  const onSubmitComment = useCallback(() => {
-    if (!me) {
-      alert("Please Login First");
-    }
-    // console.log("submit comment");
-    // console.log(commentText);
-    // console.log(post);
-    return dispatch({
-      type: ADD_COMMENT_REQUEST,
-      data: { content: commentText, postId: post.id },
-    });
-  }, [me, commentText]);
 
   const onLikeToggle = useCallback(() => {
     if (!me) {
@@ -265,38 +237,9 @@ const PostCard = ({ post }) => {
         {post && moment(post.createdAt).fromNow()}
       </Card>
 
-      {commentFormOpened && (
-        <React.Fragment>
-          <Form onFinish={onSubmitComment}>
-            <Form.Item>
-              <Input.TextArea
-                rows={4}
-                value={commentText}
-                onChange={onChangeCommentText}
-              />
-            </Form.Item>
-            <Button type="primary" htmlType="submit" loading={isAddingComment}>
-              Reply
-            </Button>
-          </Form>
-          <List
-            header={`${post.Comments ? post.Comments.length : 0} 댓글`}
-            itemLayout="horizontal"
-            dataSource={post.Comments || []}
-            renderItem={(item) => (
-              <li>
-                <Comment
-                  author={item.User.nickname}
-                  avatar={<Avatar>{item.User.nickname.slice(0, 3)}</Avatar>}
-                  content={item.content}
-                />
-              </li>
-            )}
-          />
-        </React.Fragment>
-      )}
+      {commentFormOpened && <CommentForm post={post}></CommentForm>}
     </CardWrapper>
   );
-};
+});
 
 export default PostCard;

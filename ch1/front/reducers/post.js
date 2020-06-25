@@ -84,7 +84,7 @@ const reducer = (state = initialState, action) => {
         const postIndex = draft.mainPosts.findIndex(
           (v) => v.id === action.data.postId
         );
-        draft.mainPosts[postIndex].Comments.push(action.data);
+        draft.mainPosts[postIndex].Comments.push(action.data.comment);
         draft.isAddedComment = true;
         draft.isAddingComment = false;
         break;
@@ -100,7 +100,7 @@ const reducer = (state = initialState, action) => {
         const postIndex = draft.mainPosts.findIndex(
           (v) => v.id === action.data.postId
         );
-        draft.mainPosts[postIndex].Comments.push(action.data);
+        draft.mainPosts[postIndex].Comments = action.data.comments;
         break;
       }
 
