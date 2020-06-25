@@ -1,30 +1,18 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Link from "next/link";
-import {
-  Card,
-  Button,
-  Avatar,
-  Input,
-  Comment,
-  List,
-  Form,
-  Popover,
-} from "antd";
+import { Card, Button, Avatar, Popover } from "antd";
 import {
   RetweetOutlined,
   HeartOutlined,
   MessageOutlined,
   EllipsisOutlined,
-  HeartTwoTone,
   HeartFilled,
 } from "@ant-design/icons";
 import styled from "styled-components";
 import moment from "moment";
 
 import {
-  ADD_COMMENT_REQUEST,
-  LOAD_MAIN_POSTS_REQUEST,
   LOAD_COMMENTS_REQUEST,
   LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
@@ -35,6 +23,7 @@ import PostImages from "./postImages";
 import PostCardContent from "./PostCardContent";
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 import CommentForm from "./CommentForm";
+import FollowButton from "./FollowButton";
 
 const CardWrapper = styled.div`
   margin-bottom: 40px;
@@ -42,10 +31,29 @@ const CardWrapper = styled.div`
 
 const PostCard = React.memo(({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
-  const { me } = useSelector((state) => state.user);
-  const Liked = me && post.Likers && post.Likers.find((v) => me.id === v.id);
+  const id = useSelector((state) => state.user.me && state.user.me.id);
+  const Liked = id && post.Likers && post.Likers.find((v) => id === v.id);
   const dispatch = useDispatch();
   moment.locale("en");
+
+  /**
+   * Check the state of re-rendering during Follow
+   * 1. post 원인 아님
+   console.log("post", post);
+   useEffect(() => {
+     console.log("post Effect", post);
+   }, [post]);console.log("post", post);
+   * 2. me 원인 맞음
+   console.log(me);
+   useEffect(() => {
+     console.log("me Effect", me);
+   }, [me]);
+   * 3. me의 어느곳이 바뀌는지 체크
+   const memory = useRef(me);
+   useEffect(() => {
+     console.log("me useEffect", memory.current, me, memory.current === me);
+   }, [me]);
+   */
 
   const onCommentToggle = useCallback(() => {
     console.log(commentFormOpened);
@@ -59,7 +67,7 @@ const PostCard = React.memo(({ post }) => {
   }, [commentFormOpened]);
 
   const onLikeToggle = useCallback(() => {
-    if (!me) {
+    if (!id) {
       return alert("Please Login First");
     }
     if (Liked) {
@@ -67,14 +75,14 @@ const PostCard = React.memo(({ post }) => {
     } else {
       dispatch({ type: LIKE_POST_REQUEST, data: post.id });
     }
-  }, [me && me.id, post && post.id, Liked]);
+  }, [id, post && post.id, Liked]);
 
   const onRetweet = useCallback(() => {
     dispatch({
       type: RETWEET_REQUEST,
       data: post.id,
     });
-  }, [me && me.id, post && post.id]);
+  }, [id, post && post.id]);
 
   const onClickUnfollow = useCallback(
     (postUserId) => () => {
@@ -136,7 +144,7 @@ const PostCard = React.memo(({ post }) => {
                 <Popover
                   content={
                     <div>
-                      {me && post.UserId === me.id ? (
+                      {id && post.UserId === id ? (
                         <React.Fragment>
                           <p>Amend</p>
                           <p onClick={onClickDeletePost(post.id)}>Delete</p>
@@ -158,7 +166,7 @@ const PostCard = React.memo(({ post }) => {
                 <Popover
                   content={
                     <div>
-                      {me && post.UserId === me.id ? (
+                      {id && post.UserId === id ? (
                         <React.Fragment>
                           <p>Amend</p>
                           <p onClick={onClickDeletePost(post.id)}>Delete</p>
@@ -175,12 +183,11 @@ const PostCard = React.memo(({ post }) => {
               ]
         }
         extra={
-          !me || post.User.id === me.id ? null : me.Followings &&
-            me.Followings.find((v) => v.id === post.User.id) ? (
-            <Button onClick={onClickUnfollow(post.User.id)}>UNFOLLOW</Button>
-          ) : (
-            <Button onClick={onClickFollow(post.User.id)}>FOLLOW</Button>
-          )
+          <FollowButton
+            post={post}
+            onClickUnfollow={onClickUnfollow}
+            onClickFollow={onClickFollow}
+          ></FollowButton>
         }
       >
         {post.RetweetId && post.Retweet ? (
