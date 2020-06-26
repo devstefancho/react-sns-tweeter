@@ -11,6 +11,7 @@ import {
 } from "../reducers/user";
 import { LOAD_USER_POSTS_REQUEST } from "../reducers/post";
 import PostCard from "../components/postcard";
+import FollowList from "../components/FollowList";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -54,72 +55,20 @@ const Profile = () => {
       {me && <Alert message="user Login success !!" type="success" />}
       <Nickchangeform></Nickchangeform>
 
-      <List
-        itemLayout="horizontal"
-        style={{ marginBottom: "20px" }}
-        grid={{ gutter: 4 }}
-        size="small"
+      <FollowList
         header="Following"
-        loadMore={
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: 12,
-              height: 32,
-              lineHeight: "32px",
-            }}
-          >
-            {hasMoreFollowing && (
-              <Button onClick={onLoadMoreFollowings}>More</Button>
-            )}
-          </div>
-        }
-        bordered
-        dataSource={followingList}
-        renderItem={(item) => (
-          <List.Item>
-            <Card
-              actions={[<StopOutlined twoToneColor="#eb2f96" />]}
-              onClick={onClickUnFollow(item.id)}
-            >
-              <Card.Meta description={item.nickname}></Card.Meta>
-            </Card>
-          </List.Item>
-        )}
-      ></List>
-      <List
-        itemLayout="horizontal"
-        style={{ marginBottom: "20px" }}
-        grid={{ gutter: 4 }}
-        size="small"
-        header="Follower"
-        loadMore={
-          <div
-            style={{
-              textAlign: "center",
-              marginTop: 12,
-              height: 32,
-              lineHeight: "32px",
-            }}
-          >
-            {hasMoreFollower && (
-              <Button onClick={onLoadMoreFollowers}>More</Button>
-            )}
-          </div>
-        }
-        bordered
-        dataSource={followerList}
-        renderItem={(item) => (
-          <List.Item>
-            <Card
-              actions={[<StopOutlined twoToneColor="#eb2f96" />]}
-              onClick={onClickRemoveFollower(item.id)}
-            >
-              <Card.Meta description={item.nickname}></Card.Meta>
-            </Card>
-          </List.Item>
-        )}
-      ></List>
+        hasMore={hasMoreFollowing}
+        onLoadMore={onLoadMoreFollowings}
+        onClickIconX={onClickUnFollow}
+        itemList={followingList}
+      ></FollowList>
+      <FollowList
+        header="Followwer"
+        hasMore={hasMoreFollower}
+        onLoadMore={onLoadMoreFollowers}
+        onClickIconX={onClickRemoveFollower}
+        itemList={followerList}
+      ></FollowList>
       {me && mainPosts.map((c, i) => <PostCard key={i} post={c} />)}
     </React.Fragment>
   );
