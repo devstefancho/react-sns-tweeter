@@ -2,12 +2,14 @@ import React, { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { Form, Input, InputNumber, Button, Checkbox, Layout } from "antd";
 import { useDispatch, useSelector } from "react-redux";
+import Router from "next/router";
+import styled from "styled-components";
+
 import {
   SIGN_UP_REQUEST,
   SIGN_UP_SUCCESS,
   SIGN_UP_FAILURE,
 } from "../reducers/user";
-import Router from "next/router";
 
 //Custom hook for input form and export for reusable
 export const useInput = (initValue = null) => {
@@ -17,6 +19,12 @@ export const useInput = (initValue = null) => {
   }, []);
   return [value, handler];
 };
+
+const CheckConfirm = styled.div`
+  color: red;
+  background-color: #eeeeee;
+  text-align: center;
+`;
 
 const Signup = () => {
   const validateMessages = {
@@ -50,6 +58,9 @@ const Signup = () => {
       console.log("password is invalid or checkbox is unchecked");
       console.log(`password: ${password}, confirm: ${passwordConfirm}`);
       return setPasswordErr(true);
+    } else if (!checkBox) {
+      console.log("checkbox error");
+      return setCheckBoxErr(true);
     } else {
       dispatch({
         type: SIGN_UP_REQUEST,
@@ -64,10 +75,13 @@ const Signup = () => {
     }
   }, [id, nickname, password, passwordConfirm]);
 
-  const onChangeCheckBox = useCallback((e) => {
-    setCheckBoxErr(checkBox);
-    setCheckBox(e.target.checked);
-  }, []);
+  const onChangeCheckBox = useCallback(
+    (e) => {
+      setCheckBoxErr(checkBox); // checkBoxErr = true | false
+      setCheckBox(e.target.checked); // checkBox = false | true
+    },
+    [checkBox]
+  );
 
   if (me) {
     return null;
@@ -128,9 +142,7 @@ const Signup = () => {
           >
             Confirm it?
           </Checkbox>
-          {checkBoxErr && (
-            <div style={{ color: "red" }}>Should be Checked!</div>
-          )}
+          {checkBoxErr && <CheckConfirm>check your confirmation</CheckConfirm>}
           <br />
           <Button
             type="primary"

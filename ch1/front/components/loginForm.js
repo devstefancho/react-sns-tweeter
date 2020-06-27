@@ -3,13 +3,17 @@ import { Form, Button, Input } from "antd";
 import { useInput } from "../pages/signup";
 import { useSelector, useDispatch } from "react-redux";
 import { LOG_IN_REQUEST } from "../reducers/user";
-import { LOAD_USER_POSTS_REQUEST } from "../reducers/post";
+import styled from "styled-components";
+
+const UserError = styled.div`
+  color: red;
+`;
 
 const LoginForm = () => {
   const [loginId, onChangeLoginId] = useInput("");
   const [loginPassword, onChangeLoginPassword] = useInput("");
   const dispatch = useDispatch();
-  const { isLogging } = useSelector((state) => state.user);
+  const { isLogging, error } = useSelector((state) => state.user);
 
   const onSubmitLogin = useCallback(() => {
     console.log(loginId, loginPassword);
@@ -56,6 +60,7 @@ const LoginForm = () => {
             LogIn
           </Button>
         </Form.Item>
+        {error && <UserError>{error}</UserError>}
       </Form>
     </React.Fragment>
   );

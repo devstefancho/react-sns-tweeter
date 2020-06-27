@@ -46,7 +46,8 @@ function* login(action) {
     console.log(result, result.data);
     yield put({ type: LOG_IN_SUCCESS, data: result.data });
   } catch (e) {
-    yield put({ type: LOG_IN_FAILURE, error: e });
+    console.dir(e);
+    yield put({ type: LOG_IN_FAILURE, errorLogin: e.response.data });
   }
 }
 function* loginWatch() {
@@ -63,7 +64,7 @@ function* logout() {
     yield call(logoutAPI);
     yield put({ type: LOG_OUT_SUCCESS });
   } catch (e) {
-    yield put({ type: LOG_OUT_FAILURE, error: e });
+    yield put({ type: LOG_OUT_FAILURE, errorLogout: e.response.data });
   }
 }
 function* logoutWatch() {
@@ -79,7 +80,7 @@ function* signUp(action) {
     yield call(signUpAPI, action.data);
     yield put({ type: SIGN_UP_SUCCESS });
   } catch (e) {
-    yield put({ type: SIGN_UP_FAILURE, error: e });
+    yield put({ type: SIGN_UP_FAILURE, errorSignup: e.response.data });
     console.log(e);
   }
 }

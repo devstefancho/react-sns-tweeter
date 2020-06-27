@@ -81,6 +81,7 @@ const reducer = (state = initialState, action) => {
       case LOG_IN_FAILURE: {
         draft.isLogging = false;
         draft.me = null;
+        draft.error = action.errorLogin;
         break;
       }
 
@@ -89,6 +90,13 @@ const reducer = (state = initialState, action) => {
         draft.me = null;
         draft.followingList = [];
         draft.followerList = [];
+      }
+      case LOG_OUT_SUCCESS: {
+        break;
+      }
+      case LOG_OUT_FAILURE: {
+        draft.error = action.errorLogout;
+        break;
       }
       // SIGN_UP
       case SIGN_UP_REQUEST: {
@@ -104,6 +112,7 @@ const reducer = (state = initialState, action) => {
       case SIGN_UP_FAILURE: {
         draft.isSigned = false;
         draft.isSigningUp = false;
+        draft.error = action.errorSignup;
         break;
       }
 
