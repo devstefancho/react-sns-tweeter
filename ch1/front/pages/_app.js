@@ -47,6 +47,10 @@ const NodeBird = ({ Component, store, pageProps }) => {
               property: "og:type",
               content: "website",
             },
+            {
+              property: "og:image", //default thumbnail image
+              content: `http://localhost:3065/favicon.ico`,
+            },
           ]}
           link={[
             {
