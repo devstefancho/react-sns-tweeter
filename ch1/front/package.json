@@ -7,7 +7,7 @@
     "dev": "nodemon",
     "build": "BUNDLE_ANALYZE=both next build",
     "prestart": "npm run build",
-    "start": "NODE_ENV=production next start"
+    "start": "NODE_ENV=production PORT=80 pm2 start server"
   },
   "author": "stefan-cho",
   "license": "ISC",
@@ -35,6 +35,7 @@
     "next": "^9.3.5",
     "next-redux-saga": "^4.1.2",
     "next-redux-wrapper": "^5.0.0",
+    "pm2": "^4.4.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
