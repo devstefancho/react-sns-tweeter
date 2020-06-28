@@ -26,6 +26,9 @@ class MyDocument extends Document {
         </head>
         <body {...bodyAttrs}>
           <Main />
+          {process.env.NODE_ENV === "production" && (
+            <script src="https://polyfill.io/v3/polyfill.min.js?features=es2016%2Ces2017%2Ces2018%2Ces2019%2Ces2015%2Cdefault%2Ces5%2Ces6%2Ces7"></script>
+          )}
           <NextScript />
         </body>
       </html>
