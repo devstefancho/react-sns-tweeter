@@ -44,6 +44,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get("/", (req, res) => {
+  res.send("backend server is now running on PORT:80");
+});
+
 app.use("/api/user", userAPIRouter);
 app.use("/api/post", postAPIRouter);
 app.use("/api/posts", postsAPIRouter);
