@@ -12,6 +12,7 @@ const userAPIRouter = require("./routes/user");
 const postAPIRouter = require("./routes/post");
 const postsAPIRouter = require("./routes/posts");
 const hashtagAPIRouter = require("./routes/hashtag");
+const prod = process.env.NODE_ENV;
 
 dotenv.config();
 const app = express();
@@ -53,6 +54,9 @@ app.use("/api/post", postAPIRouter);
 app.use("/api/posts", postsAPIRouter);
 app.use("/api/hashtag", hashtagAPIRouter);
 
-app.listen(3065, () => {
-  console.log("server is running on http://localhost:3065");
+app.listen(prod ? 80 : 3065, () => {
+  console.log(
+    "server is running on",
+    prod ? "Port 80" : "http://localhost:3065"
+  );
 });
