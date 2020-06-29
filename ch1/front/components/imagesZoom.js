@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Slider from "react-slick";
 import { CloseSquareOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import { backUrl } from "../config/config";
 
 const ImageWindow = styled.div`
   position: fixed;
@@ -68,11 +69,7 @@ const ImagesZoom = ({ images, onClose }) => {
             {images.map((v, i) => {
               return (
                 <div key={i} style={{ padding: 32, textAlign: "center" }}>
-                  <img
-                    key={i}
-                    alt={"image"}
-                    src={`http://localhost:3065/${v.src}`}
-                  ></img>
+                  <img key={i} alt={"image"} src={`${backUrl}/${v.src}`}></img>
                 </div>
               );
             })}

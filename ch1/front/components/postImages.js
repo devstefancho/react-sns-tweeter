@@ -2,6 +2,7 @@ import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { PlusCircleOutlined } from "@ant-design/icons";
 import ImagesZoom from "./imagesZoom";
+import { backUrl } from "../config/config";
 
 const PostImages = ({ image }) => {
   const [openImagesZoom, setOpenImagesZoom] = useState(false);
@@ -13,19 +14,19 @@ const PostImages = ({ image }) => {
   }, []);
 
   if (image.length === 1) {
-    return <img alt={image} src={`http://localhost:3065/${image[0].src}`} />;
+    return <img alt={image} src={`${backUrl}/${image[0].src}`} />;
   } else if (image.length === 2) {
     return (
       <React.Fragment>
         <img
           style={{ width: "50%", height: "auto" }}
           alt={image}
-          src={`http://localhost:3065/${image[0].src}`}
+          src={`${backUrl}/${image[0].src}`}
         />
         <img
           style={{ width: "50%", height: "auto" }}
           alt={image}
-          src={`http://localhost:3065/${image[1].src}`}
+          src={`${backUrl}/${image[1].src}`}
         />
       </React.Fragment>
     );
@@ -35,7 +36,7 @@ const PostImages = ({ image }) => {
         <img
           style={{ width: "50%", height: "auto", display: "inline-block" }}
           alt={image}
-          src={`http://localhost:3065/${image[0].src}`}
+          src={`${backUrl}/${image[0].src}`}
           onClick={onClickZoomIn}
         />
         <div

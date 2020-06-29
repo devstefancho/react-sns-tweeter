@@ -14,6 +14,7 @@ import reducer from "../reducers";
 import rootSaga from "../sagas";
 import AppLayout from "../components/AppLayout";
 import { LOAD_USER_REQUEST } from "../reducers/user";
+import { backUrl } from "../config/config";
 
 const NodeBird = ({ Component, store, pageProps }) => {
   return (
@@ -49,7 +50,7 @@ const NodeBird = ({ Component, store, pageProps }) => {
             },
             {
               property: "og:image", //default thumbnail image
-              content: `http://localhost:3065/favicon.ico`,
+              content: `${backUrl}/favicon.ico`,
             },
           ]}
           link={[
