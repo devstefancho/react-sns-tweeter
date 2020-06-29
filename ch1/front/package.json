@@ -7,7 +7,7 @@
     "dev": "nodemon",
     "build": "BUNDLE_ANALYZE=both next build",
     "prestart": "npm run build",
-    "start": "NODE_ENV=production PORT=80 pm2 start server"
+    "start": "NODE_ENV=production PORT=80 pm2 start server.js"
   },
   "author": "stefan-cho",
   "license": "ISC",
