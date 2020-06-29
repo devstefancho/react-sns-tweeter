@@ -73,15 +73,16 @@ const Signup = () => {
       console.log("password correct and box checked");
       return setPasswordErr(false);
     }
-  }, [id, nickname, password, passwordConfirm]);
+  }, [id, nickname, password, passwordConfirm, checkBox]);
 
-  const onChangeCheckBox = useCallback(
-    (e) => {
-      setCheckBoxErr(checkBox); // checkBoxErr = true | false
-      setCheckBox(e.target.checked); // checkBox = false | true
-    },
-    [checkBox]
-  );
+  const onChangeCheckBox = (e) => {
+    // console.log(checkBox);
+    setCheckBoxErr(checkBox); // checkBoxErr = true | false
+    setCheckBox(e.target.checked); // checkBox = false | true
+    // console.log(e.target.checked);
+    // console.log(checkBox);
+    // console.log("======");
+  };
 
   if (me) {
     return null;
