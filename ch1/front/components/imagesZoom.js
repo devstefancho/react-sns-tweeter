@@ -69,7 +69,7 @@ const ImagesZoom = ({ images, onClose }) => {
             {images.map((v, i) => {
               return (
                 <div key={i} style={{ padding: 32, textAlign: "center" }}>
-                  <img key={i} alt={"image"} src={`${backUrl}/${v.src}`}></img>
+                  <img key={i} alt={"image"} src={v.src}></img>
                 </div>
               );
             })}

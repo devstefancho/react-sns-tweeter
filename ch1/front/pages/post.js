@@ -25,8 +25,7 @@ const post = ({ id }) => {
           },
           {
             property: "og:image",
-            content:
-              singlePost.Images[0] && `${backUrl}/${singlePost.Images[0].src}`,
+            content: singlePost.Images[0] && singlePost.Images[0].src,
           },
           {
             property: "og:url",
@@ -37,9 +36,7 @@ const post = ({ id }) => {
       <div>{singlePost.content}</div>
       <div>{singlePost.User && singlePost.User.nickname}</div>
       <div>
-        {singlePost.Images[0] && (
-          <img src={`${backUrl}/${singlePost.Images[0].src}`}></img>
-        )}
+        {singlePost.Images[0] && <img src={singlePost.Images[0].src}></img>}
       </div>
     </React.Fragment>
   );

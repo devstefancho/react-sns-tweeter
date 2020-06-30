@@ -50,7 +50,7 @@ const NodeBird = ({ Component, store, pageProps }) => {
             },
             {
               property: "og:image", //default thumbnail image
-              content: `${backUrl}/favicon.ico`,
+              content: `${frontUrl}/favicon.ico`,
             },
           ]}
           link={[

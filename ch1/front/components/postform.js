@@ -98,11 +98,7 @@ const PostForm = () => {
           {imagePaths.map((x, i) => {
             return (
               <div key={i} style={{ display: "inline - block" }}>
-                <img
-                  src={`${backUrl}/${x}`}
-                  alt={x}
-                  style={{ width: "200px" }}
-                ></img>
+                <img src={v} alt={x} style={{ width: "200px" }}></img>
                 <div>
                   <Button onClick={onClickRemoveImage(i)}>Delete</Button>
                 </div>
