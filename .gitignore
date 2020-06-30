@@ -4,3 +4,4 @@ textmemo
 .env
 uploads
 *.pem
+rootkey.*
