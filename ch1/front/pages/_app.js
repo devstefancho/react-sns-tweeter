@@ -1,84 +1,60 @@
 import React from "react";
 import axios from "axios";
-import Head from "next/head";
 import Proptypes from "prop-types";
 import withRedux from "next-redux-wrapper";
 import withReduxSaga from "next-redux-saga";
 import createSagaMiddleware from "redux-saga";
 import { Provider } from "react-redux";
 import { createStore, compose, applyMiddleware } from "redux";
-import Helmet from "react-helmet";
-import { Container } from "next/app";
+import { Helmet } from "react-helmet";
 
 import reducer from "../reducers";
 import rootSaga from "../sagas";
 import AppLayout from "../components/AppLayout";
 import { LOAD_USER_REQUEST } from "../reducers/user";
-import { backUrl, frontUrl } from "../config/config";
+import { frontUrl } from "../config/config";
 
 const NodeBird = ({ Component, store, pageProps }) => {
   return (
-    <Container>
+    <>
       <Provider store={store}>
-        <Helmet
-          title="NodeBird"
-          htmlAttributes={{ lang: "ko" }}
-          meta={[
-            {
-              charset: "UTF-8",
-            },
-            {
-              name: "viewport",
-              content:
-                "width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=yes,viewport-fit-cover",
-            },
-            {
-              "http-equiv": "X-UA-Compatible",
-              content: "IE-edge",
-            },
-            {
-              name: "description",
-              content: "stefan cho's Node Tweet",
-            },
-            {
-              name: "og:title",
-              content: "stefan cho's React and Node Tweeter SNS",
-            },
-            {
-              property: "og:type",
-              content: "website",
-            },
-            {
-              property: "og:image", //default thumbnail image
-              content: `${frontUrl}/favicon.ico`,
-            },
-          ]}
-          link={[
-            {
-              rel: "stylesheet",
-              href:
-                "https://cdnjs.cloudflare.com/ajax/libs/antd/4.1.3/antd.css", //ant-desing CDN으로 직접 css를 import하려면 웹펙에서 설정을 해줘야함
-            },
-            {
-              rel: "stylesheet",
-              type: "text/css",
-              charset: "UTF-8",
-              href:
-                "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css",
-            },
-            {
-              rel: "stylesheet",
-              type: "text/css",
-              href:
-                "https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css",
-            },
-          ]}
-        />
+        <Helmet>
+          <title>react sns</title>
+          <html lang="ko" />
+          <meta charSet="utf-8" />
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0, user-scalable=yes,viewport-fit-cover"
+          />
+          <meta http-equiv="X-UA-Compatible" content="IE-edge" />
+          <meta name="description" content="stefan cho's Node Tweet" />
+          <meta
+            property="og:title"
+            content="stefan cho's React and Node Tweeter SNS"
+          />
+          <meta property="og:type" content="website" />
+          <meta property="og:image" content="stefancho.gq/favicon.ico" />
+          <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/antd/4.1.3/antd.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            charSet="UTF-8"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css"
+          />
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css"
+          />
+        </Helmet>
         <AppLayout>
           <Component {...pageProps} />
         </AppLayout>
       </Provider>
-    </Container>
+    </>
   );
 };
 
