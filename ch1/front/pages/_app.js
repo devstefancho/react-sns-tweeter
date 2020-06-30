@@ -14,7 +14,7 @@ import reducer from "../reducers";
 import rootSaga from "../sagas";
 import AppLayout from "../components/AppLayout";
 import { LOAD_USER_REQUEST } from "../reducers/user";
-import { backUrl } from "../config/config";
+import { backUrl, frontUrl } from "../config/config";
 
 const NodeBird = ({ Component, store, pageProps }) => {
   return (
