@@ -95,10 +95,10 @@ const PostForm = () => {
           Submit
         </Button>
         <div>
-          {imagePaths.map((x, i) => {
+          {imagePaths.map((v, i) => {
             return (
               <div key={i} style={{ display: "inline - block" }}>
-                <img src={v} alt={x} style={{ width: "200px" }}></img>
+                <img src={v} alt={v} style={{ width: "200px" }}></img>
                 <div>
                   <Button onClick={onClickRemoveImage(i)}>Delete</Button>
                 </div>
