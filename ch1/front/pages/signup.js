@@ -47,7 +47,7 @@ const Signup = () => {
   useEffect(() => {
     if (me) {
       alert("You have been signed up!!");
-      Router.push("/");
+      // Router.push("/");
     }
   }, [me && me.id]);
 
