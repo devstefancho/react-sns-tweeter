@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const expressSession = require("express-session");
 const passport = require("passport");
 const dotenv = require("dotenv");
+const helmet = require("helmet");
+const hpp = require("hpp");
 
 const passportConfig = require("./passport");
 const db = require("./models");
@@ -12,21 +14,35 @@ const userAPIRouter = require("./routes/user");
 const postAPIRouter = require("./routes/post");
 const postsAPIRouter = require("./routes/posts");
 const hashtagAPIRouter = require("./routes/hashtag");
-const prod = process.env.NODE_ENV;
+const { frontUrl } = require("../front/config/config");
+const prod = process.env.NODE_ENV === "production";
 
 dotenv.config();
 const app = express();
 db.sequelize.sync();
 passportConfig();
 
-app.use(morgan("dev"));
+if (prod) {
+  app.use(hpp());
+  app.use(morgan("combined"));
+  app.use(helmet());
+  app.use(
+    cors({
+      origin: "http://stefancho.gq",
+      credentials: true,
+    })
+  );
+} else {
+  app.use(morgan("dev"));
+  app.use(
+    cors({
+      origin: true,
+      credentials: true,
+    })
+  );
+}
+
 app.use("/", express.static("uploads"));
-app.use(
-  cors({
-    origin: true,
-    credentials: true,
-  })
-);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
@@ -38,6 +54,7 @@ app.use(
     cookie: {
       httpOnly: true,
       secure: false,
+      domain: prod && ".stefancho.gq", // {frontUrl}
     },
     name: "rnbck11",
   })
@@ -54,7 +71,7 @@ app.use("/api/post", postAPIRouter);
 app.use("/api/posts", postsAPIRouter);
 app.use("/api/hashtag", hashtagAPIRouter);
 
-app.listen(prod === "production" ? process.env.PORT : 3065, () => {
+app.listen(prod ? process.env.PORT : 3065, () => {
   console.log(
     "server is running on ",
     prod ? `${process.env.PORT}` : "http://localhost:3065"
